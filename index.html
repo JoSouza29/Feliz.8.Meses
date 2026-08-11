@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feliz nosso dia, 8 meses 🤍</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Josefin+Sans:wght@400;500;600&display=swap');
+
+:root{
+  --vivid-red:   #e8203d;
+  --hot-pink:    #ff5f8f;
+  --light-pink:  #ffc2d6;
+  --pale-pink:   #ffe9f0;
+  --deep-wine:   #55081f;
+  --gold:        #f3cf94;
+  --cream:       #fff6f8;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html, body{
+  height:100%;
+  overflow:hidden;
+  background:var(--deep-wine);
+}
+
+body{
+  font-family:'Josefin Sans', sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+.stage{
+  position:relative;
+  height:100vh;
+  height:100dvh;
+  width:100vw;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:radial-gradient(circle at 30% 22%, var(--hot-pink) 0%, var(--vivid-red) 45%, var(--deep-wine) 100%);
+  background-size:220% 220%;
+  animation:driftBg 16s ease-in-out infinite;
+}
+
+@keyframes driftBg{
+  0%,100%{ background-position:28% 20%; }
+  50%{ background-position:72% 78%; }
+}
+
+/* ---------- floating hearts ---------- */
+.hearts{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.heart-particle{
+  position:absolute;
+  bottom:-10%;
+  will-change:transform, opacity;
+  animation-name:floatUp;
+  animation-timing-function:ease-in;
+  animation-iteration-count:infinite;
+  text-shadow:0 0 12px rgba(255,255,255,0.25);
+  opacity:0;
+}
+@keyframes floatUp{
+  0%{ transform:translate(0,0) rotate(0deg); opacity:0; }
+  10%{ opacity:var(--o,0.55); }
+  50%{ transform:translate(var(--sway,18px), -55vh) rotate(8deg); }
+  90%{ opacity:var(--o,0.55); }
+  100%{ transform:translate(calc(var(--sway,18px) * -1), -115vh) rotate(-6deg); opacity:0; }
+}
+
+/* ---------- content ---------- */
+.content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  color:var(--cream);
+  padding:0 6vw;
+  width:100%;
+}
+
+.phrase{
+  font-family:'Great Vibes', cursive;
+  font-weight:400;
+  font-size:clamp(2.4rem, 10vw, 5.5rem);
+  line-height:1.25;
+  color:var(--cream);
+  text-shadow:0 4px 26px rgba(85,8,31,0.45);
+  opacity:0;
+  transform:scale(0.9);
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.phrase-text{
+  display:inline-block;
+  max-width:100%;
+}
+.cursor{
+  display:inline-block;
+  margin-left:0.06em;
+  opacity:0;
+}
+.typing .cursor{
+  opacity:1;
+  animation:blink 0.9s steps(1) infinite;
+}
+@keyframes blink{ 50%{ opacity:0; } }
+
+.phrase.enter{
+  animation:phraseIn 0.7s cubic-bezier(.2,.8,.25,1) forwards;
+}
+.phrase.leave{
+  animation:phraseOut 0.85s ease-in forwards;
+}
+@keyframes phraseIn{
+  0%{ opacity:0; transform:scale(0.92) translateY(8px); }
+  100%{ opacity:1; transform:scale(1) translateY(0); }
+}
+@keyframes phraseOut{
+  0%{ opacity:1; transform:scale(1); filter:blur(0); }
+  100%{ opacity:0; transform:scale(1.08); filter:blur(6px); }
+}
+
+.milestone{
+  position:relative;
+  opacity:0;
+  transform:scale(0.85);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(0.3rem, 1.4vh, 0.7rem);
+}
+.milestone.enter{
+  animation:milestoneIn 1s cubic-bezier(.2,.8,.25,1) forwards;
+}
+@keyframes milestoneIn{
+  0%{ opacity:0; transform:scale(0.82); }
+  100%{ opacity:1; transform:scale(1); }
+}
+
+.frame{
+  position:relative;
+  width:clamp(230px, 56vw, 380px);
+  height:clamp(230px, 56vw, 380px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  transition:none;
+}
+.frame.dissolve{
+  animation:frameDissolve 0.9s ease-in forwards;
+}
+@keyframes frameDissolve{
+  0%{ opacity:1; filter:blur(0px); transform:scale(1); }
+  100%{ opacity:0; filter:blur(7px); transform:scale(0.86); }
+}
+.frame.hidden{
+  display:none;
+}
+
+.heart-outline{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+.heart-outline path{
+  fill:none;
+  stroke:url(#heartGrad);
+  stroke-width:1.4;
+  stroke-linecap:round;
+  stroke-dasharray:100;
+  stroke-dashoffset:100;
+}
+.milestone.enter .heart-outline path{
+  animation-name:drawStroke;
+  animation-duration:1.4s;
+  animation-delay:0.15s;
+  animation-timing-function:ease-out;
+  animation-fill-mode:forwards;
+}
+.frame.dissolve .heart-outline path{
+  animation-name:drawStroke;
+  animation-duration:0.9s;
+  animation-delay:0s;
+  animation-timing-function:ease-in;
+  animation-direction:reverse;
+  animation-fill-mode:forwards;
+}
+@keyframes drawStroke{
+  from{ stroke-dashoffset:100; }
+  to{ stroke-dashoffset:0; }
+}
+
+.numbers-layer{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  transition:opacity 0.6s ease;
+}
+.numbers-layer.show{ opacity:1; }
+
+.eyebrow{
+  font-family:'Josefin Sans', sans-serif;
+  font-size:clamp(0.8rem, 2.1vw, 1.15rem);
+  letter-spacing:0.4em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:clamp(0.5rem, 1.6vw, 0.9rem);
+}
+
+.number{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:600;
+  font-size:clamp(3.6rem, 15vw, 7.2rem);
+  line-height:0.85;
+  color:var(--cream);
+  text-shadow:0 6px 34px rgba(85,8,31,0.5);
+  animation:heartbeat 2.6s ease-in-out infinite;
+}
+@keyframes heartbeat{
+  0%, 100%{ transform:scale(1); }
+  10%{ transform:scale(1.05); }
+  20%{ transform:scale(0.99); }
+  30%{ transform:scale(1.02); }
+  40%{ transform:scale(1); }
+}
+
+.label{
+  font-family:'Josefin Sans', sans-serif;
+  font-weight:500;
+  font-size:clamp(0.68rem, 1.7vw, 0.9rem);
+  letter-spacing:0.5em;
+  text-transform:uppercase;
+  color:var(--light-pink);
+  margin-top:clamp(0.35rem, 1.4vw, 0.7rem);
+  padding-left:0.5em;
+}
+
+/* ---------- the written message, after the heart dissolves ---------- */
+.message-outside{
+  font-family:'Caveat', cursive;
+  font-weight:600;
+  font-size:clamp(1.3rem, 5.2vw, 2.3rem);
+  line-height:1.45;
+  color:var(--cream);
+  text-shadow:0 4px 20px rgba(85,8,31,0.45);
+  max-width:84vw;
+  text-align:center;
+  opacity:0;
+  transition:opacity 0.5s ease;
+}
+.message-outside.show{ opacity:1; }
+
+/* ---------- replay control ---------- */
+.replay{
+  position:absolute;
+  bottom:clamp(1.2rem, 3.4vh, 2.2rem);
+  left:50%;
+  transform:translateX(-50%);
+  z-index:3;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.35);
+  color:var(--cream);
+  font-family:'Josefin Sans', sans-serif;
+  font-size:0.8rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:0.65em 1.4em;
+  border-radius:999px;
+  cursor:pointer;
+  opacity:0;
+  pointer-events:none;
+  backdrop-filter:blur(4px);
+  transition:opacity 0.6s ease, background 0.2s ease;
+}
+.replay.show{
+  opacity:0.85;
+  pointer-events:auto;
+}
+.replay:hover{
+  background:rgba(255,255,255,0.22);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .stage{ animation:none; }
+  .number{ animation:none; }
+  .heart-particle{ animation:none; display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <div class="content">
+    <h1 class="phrase" id="phrase">
+      <span class="phrase-text" id="phraseText"></span><span class="cursor" id="phraseCursor">|</span>
+    </h1>
+
+    <div class="milestone" id="milestone">
+      <div class="frame" id="frame">
+        <svg class="heart-outline" viewBox="0 0 100 100" aria-hidden="true">
+          <defs>
+            <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f3cf94"/>
+              <stop offset="55%" stop-color="#ffc2d6"/>
+              <stop offset="100%" stop-color="#ff5f8f"/>
+            </linearGradient>
+          </defs>
+          <path pathLength="100" d="M50,88 C22,68 6,50 6,32 C6,17 17,7 31,7 C40,7 47,12 50,20 C53,12 60,7 69,7 C83,7 94,17 94,32 C94,50 78,68 50,88 Z"/>
+        </svg>
+
+        <div class="numbers-layer" id="numbersLayer">
+          <div class="eyebrow">juntos há</div>
+          <div class="number">8</div>
+          <div class="label">meses</div>
+        </div>
+      </div>
+
+      <div class="message-outside" id="messageOutside">
+        <span id="loveText"></span><span class="cursor" id="loveCursor">|</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="replay" id="replay" type="button">↻ ver de novo</button>
+</div>
+
+<script>
+(function(){
+  const phrase = document.getElementById('phrase');
+  const phraseText = document.getElementById('phraseText');
+  const milestone = document.getElementById('milestone');
+  const frame = document.getElementById('frame');
+  const numbersLayer = document.getElementById('numbersLayer');
+  const messageOutside = document.getElementById('messageOutside');
+  const loveText = document.getElementById('loveText');
+  const replayBtn = document.getElementById('replay');
+  const heartsWrap = document.getElementById('hearts');
+
+  const PHRASE = 'Feliz nosso dia';
+  const MESSAGE = 'Eu te amo Yasmin, com minha alma e meu coração'<br> ' feliz nosso dia!';
+
+  let timers = [];
+  function clearTimers(){ timers.forEach(t => clearTimeout(t)); timers = []; }
+  function after(ms, fn){ timers.push(setTimeout(fn, ms)); }
+
+  function spawnHearts(){
+    heartsWrap.innerHTML = '';
+    const colors = ['#ffc2d6', '#fff6f8', '#f3cf94', '#ff8fae'];
+    const count = 22;
+    for(let i = 0; i < count; i++){
+      const h = document.createElement('span');
+      h.className = 'heart-particle';
+      h.textContent = '♥';
+      const size = (Math.random() * 1.1 + 0.6).toFixed(2);
+      const left = (Math.random() * 100).toFixed(1);
+      const duration = (Math.random() * 9 + 9).toFixed(1);
+      const delay = (Math.random() * 14).toFixed(1);
+      const sway = (Math.random() * 40 + 10).toFixed(0);
+      const opacity = (Math.random() * 0.35 + 0.25).toFixed(2);
+      h.style.left = left + 'vw';
+      h.style.fontSize = size + 'rem';
+      h.style.color = colors[i % colors.length];
+      h.style.animationDuration = duration + 's';
+      h.style.animationDelay = delay + 's';
+      h.style.setProperty('--sway', sway + 'px');
+      h.style.setProperty('--o', opacity);
+      heartsWrap.appendChild(h);
+    }
+  }
+
+  function typeWriter(el, text, speed, onDone){
+    el.textContent = '';
+    let i = 0;
+    function step(){
+      if(i <= text.length){
+        el.textContent = text.slice(0, i);
+        i++;
+        after(speed, step);
+      } else if(onDone){
+        onDone();
+      }
+    }
+    step();
+  }
+
+  function runSequence(){
+    clearTimers();
+    spawnHearts();
+
+    // reset state
+    phrase.classList.remove('enter', 'leave', 'typing');
+    milestone.classList.remove('enter');
+    frame.classList.remove('dissolve', 'hidden');
+    numbersLayer.classList.remove('show');
+    messageOutside.classList.remove('show', 'typing');
+    replayBtn.classList.remove('show');
+    phraseText.textContent = '';
+    loveText.textContent = '';
+    void phrase.offsetWidth;
+
+    // 1. phrase fades in, then types itself out
+    phrase.classList.add('enter');
+    phrase.classList.add('typing');
+    after(500, () => {
+      typeWriter(phraseText, PHRASE, 85, () => {
+        // 2. finished typing -> short 3.5s wait, then hide phrase and form the heart
+        after(3500, () => {
+          phrase.classList.remove('typing');
+          phrase.classList.remove('enter');
+          phrase.classList.add('leave');
+
+          after(300, () => {
+            milestone.classList.add('enter');
+            after(400, () => numbersLayer.classList.add('show'));
+
+            // 3. heart finishes forming, holds "8 meses" for a moment,
+            // then undoes/dissolves itself, and the message takes its place
+            after(3600, () => {
+              frame.classList.add('dissolve');
+              numbersLayer.classList.remove('show');
+
+              after(900, () => {
+                frame.classList.add('hidden');
+                messageOutside.classList.add('show');
+                messageOutside.classList.add('typing');
+                typeWriter(loveText, MESSAGE, 55, () => {
+                  messageOutside.classList.remove('typing');
+                  after(600, () => replayBtn.classList.add('show'));
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  }
+
+  replayBtn.addEventListener('click', runSequence);
+  runSequence();
+})();
+</script>
+
+</body>
+</html>
