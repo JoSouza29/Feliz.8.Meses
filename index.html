@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Feliz nosso dia, 8 meses 🤍</title>
+<title>Feliz nosso dia — 8 meses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Josefin+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Josefin+Sans:wght@400;500;600&display=swap');
-
 :root{
   --vivid-red:   #e8203d;
   --hot-pink:    #ff5f8f;
@@ -21,20 +22,21 @@
 
 html, body{
   height:100%;
+  width:100%;
   overflow:hidden;
   background:var(--deep-wine);
 }
 
 body{
-  font-family:'Josefin Sans', sans-serif;
+  font-family:'Josefin Sans', Arial, sans-serif;
   -webkit-font-smoothing:antialiased;
 }
 
 .stage{
   position:relative;
-  height:100vh;
-  height:100dvh;
-  width:100vw;
+  height:100%;
+  width:100%;
+  min-height:100%;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -85,7 +87,7 @@ body{
 }
 
 .phrase{
-  font-family:'Great Vibes', cursive;
+  font-family:'Great Vibes', 'Brush Script MT', cursive;
   font-weight:400;
   font-size:clamp(2.4rem, 10vw, 5.5rem);
   line-height:1.25;
@@ -155,7 +157,6 @@ body{
   align-items:center;
   justify-content:center;
   flex-shrink:0;
-  transition:none;
 }
 .frame.dissolve{
   animation:frameDissolve 0.9s ease-in forwards;
@@ -174,33 +175,14 @@ body{
   width:100%;
   height:100%;
   z-index:0;
+  overflow:visible;
 }
 .heart-outline path{
   fill:none;
   stroke:url(#heartGrad);
   stroke-width:1.4;
   stroke-linecap:round;
-  stroke-dasharray:100;
-  stroke-dashoffset:100;
-}
-.milestone.enter .heart-outline path{
-  animation-name:drawStroke;
-  animation-duration:1.4s;
-  animation-delay:0.15s;
-  animation-timing-function:ease-out;
-  animation-fill-mode:forwards;
-}
-.frame.dissolve .heart-outline path{
-  animation-name:drawStroke;
-  animation-duration:0.9s;
-  animation-delay:0s;
-  animation-timing-function:ease-in;
-  animation-direction:reverse;
-  animation-fill-mode:forwards;
-}
-@keyframes drawStroke{
-  from{ stroke-dashoffset:100; }
-  to{ stroke-dashoffset:0; }
+  transition:stroke-dashoffset 1.4s ease-out;
 }
 
 .numbers-layer{
@@ -217,7 +199,7 @@ body{
 .numbers-layer.show{ opacity:1; }
 
 .eyebrow{
-  font-family:'Josefin Sans', sans-serif;
+  font-family:'Josefin Sans', Arial, sans-serif;
   font-size:clamp(0.8rem, 2.1vw, 1.15rem);
   letter-spacing:0.4em;
   text-transform:uppercase;
@@ -226,7 +208,7 @@ body{
 }
 
 .number{
-  font-family:'Cormorant Garamond', serif;
+  font-family:'Cormorant Garamond', Georgia, serif;
   font-weight:600;
   font-size:clamp(3.6rem, 15vw, 7.2rem);
   line-height:0.85;
@@ -243,7 +225,7 @@ body{
 }
 
 .label{
-  font-family:'Josefin Sans', sans-serif;
+  font-family:'Josefin Sans', Arial, sans-serif;
   font-weight:500;
   font-size:clamp(0.68rem, 1.7vw, 0.9rem);
   letter-spacing:0.5em;
@@ -255,7 +237,7 @@ body{
 
 /* ---------- the written message, after the heart dissolves ---------- */
 .message-outside{
-  font-family:'Caveat', cursive;
+  font-family:'Caveat', 'Segoe Script', cursive;
   font-weight:600;
   font-size:clamp(1.3rem, 5.2vw, 2.3rem);
   line-height:1.45;
@@ -278,7 +260,7 @@ body{
   background:rgba(255,255,255,0.12);
   border:1px solid rgba(255,255,255,0.35);
   color:var(--cream);
-  font-family:'Josefin Sans', sans-serif;
+  font-family:'Josefin Sans', Arial, sans-serif;
   font-size:0.8rem;
   letter-spacing:0.12em;
   text-transform:uppercase;
@@ -287,6 +269,7 @@ body{
   cursor:pointer;
   opacity:0;
   pointer-events:none;
+  -webkit-backdrop-filter:blur(4px);
   backdrop-filter:blur(4px);
   transition:opacity 0.6s ease, background 0.2s ease;
 }
@@ -318,7 +301,7 @@ body{
 
     <div class="milestone" id="milestone">
       <div class="frame" id="frame">
-        <svg class="heart-outline" viewBox="0 0 100 100" aria-hidden="true">
+        <svg class="heart-outline" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
           <defs>
             <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stop-color="#f3cf94"/>
@@ -326,7 +309,7 @@ body{
               <stop offset="100%" stop-color="#ff5f8f"/>
             </linearGradient>
           </defs>
-          <path pathLength="100" d="M50,88 C22,68 6,50 6,32 C6,17 17,7 31,7 C40,7 47,12 50,20 C53,12 60,7 69,7 C83,7 94,17 94,32 C94,50 78,68 50,88 Z"/>
+          <path id="heartPath" d="M50,88 C22,68 6,50 6,32 C6,17 17,7 31,7 C40,7 47,12 50,20 C53,12 60,7 69,7 C83,7 94,17 94,32 C94,50 78,68 50,88 Z"/>
         </svg>
 
         <div class="numbers-layer" id="numbersLayer">
@@ -342,123 +325,163 @@ body{
     </div>
   </div>
 
-  <button class="replay" id="replay" type="button">↻ ver de novo</button>
+  <button class="replay" id="replay" type="button">&#8635; ver de novo</button>
 </div>
 
 <script>
-(function(){
-  const phrase = document.getElementById('phrase');
-  const phraseText = document.getElementById('phraseText');
-  const milestone = document.getElementById('milestone');
-  const frame = document.getElementById('frame');
-  const numbersLayer = document.getElementById('numbersLayer');
-  const messageOutside = document.getElementById('messageOutside');
-  const loveText = document.getElementById('loveText');
-  const replayBtn = document.getElementById('replay');
-  const heartsWrap = document.getElementById('hearts');
+document.addEventListener('DOMContentLoaded', function () {
+  try {
+    var phrase = document.getElementById('phrase');
+    var phraseText = document.getElementById('phraseText');
+    var milestone = document.getElementById('milestone');
+    var frame = document.getElementById('frame');
+    var numbersLayer = document.getElementById('numbersLayer');
+    var messageOutside = document.getElementById('messageOutside');
+    var loveText = document.getElementById('loveText');
+    var replayBtn = document.getElementById('replay');
+    var heartsWrap = document.getElementById('hearts');
+    var heartPath = document.getElementById('heartPath');
 
-  const PHRASE = 'Feliz nosso dia';
-  const MESSAGE = 'Eu te amo Yasmin, com minha alma e meu coração'<br> ' feliz nosso dia!';
+    var PHRASE = 'Feliz nosso dia';
+    var MESSAGE = 'Eu te amo Yasmin, com minha alma e meu coração, feliz nosso dia!';
 
-  let timers = [];
-  function clearTimers(){ timers.forEach(t => clearTimeout(t)); timers = []; }
-  function after(ms, fn){ timers.push(setTimeout(fn, ms)); }
-
-  function spawnHearts(){
-    heartsWrap.innerHTML = '';
-    const colors = ['#ffc2d6', '#fff6f8', '#f3cf94', '#ff8fae'];
-    const count = 22;
-    for(let i = 0; i < count; i++){
-      const h = document.createElement('span');
-      h.className = 'heart-particle';
-      h.textContent = '♥';
-      const size = (Math.random() * 1.1 + 0.6).toFixed(2);
-      const left = (Math.random() * 100).toFixed(1);
-      const duration = (Math.random() * 9 + 9).toFixed(1);
-      const delay = (Math.random() * 14).toFixed(1);
-      const sway = (Math.random() * 40 + 10).toFixed(0);
-      const opacity = (Math.random() * 0.35 + 0.25).toFixed(2);
-      h.style.left = left + 'vw';
-      h.style.fontSize = size + 'rem';
-      h.style.color = colors[i % colors.length];
-      h.style.animationDuration = duration + 's';
-      h.style.animationDelay = delay + 's';
-      h.style.setProperty('--sway', sway + 'px');
-      h.style.setProperty('--o', opacity);
-      heartsWrap.appendChild(h);
+    if (!phrase || !phraseText || !milestone || !frame || !numbersLayer || !messageOutside || !loveText || !replayBtn || !heartsWrap || !heartPath) {
+      throw new Error('elemento essencial nao encontrado');
     }
-  }
 
-  function typeWriter(el, text, speed, onDone){
-    el.textContent = '';
-    let i = 0;
-    function step(){
-      if(i <= text.length){
-        el.textContent = text.slice(0, i);
-        i++;
-        after(speed, step);
-      } else if(onDone){
-        onDone();
+    // measure the heart path once, so the line-draw effect works
+    // reliably across browsers (no dependency on SVG2 pathLength support)
+    var heartLen = heartPath.getTotalLength ? heartPath.getTotalLength() : 300;
+    heartPath.style.strokeDasharray = heartLen;
+    heartPath.style.strokeDashoffset = heartLen;
+
+    var timers = [];
+    function clearTimers() { for (var t = 0; t < timers.length; t++) { clearTimeout(timers[t]); } timers = []; }
+    function after(ms, fn) { timers.push(setTimeout(fn, ms)); }
+
+    function spawnHearts() {
+      heartsWrap.innerHTML = '';
+      var colors = ['#ffc2d6', '#fff6f8', '#f3cf94', '#ff8fae'];
+      var count = 22;
+      for (var i = 0; i < count; i++) {
+        var h = document.createElement('span');
+        h.className = 'heart-particle';
+        h.textContent = '\u2665';
+        var size = (Math.random() * 1.1 + 0.6).toFixed(2);
+        var left = (Math.random() * 100).toFixed(1);
+        var duration = (Math.random() * 9 + 9).toFixed(1);
+        var delay = (Math.random() * 14).toFixed(1);
+        var sway = (Math.random() * 40 + 10).toFixed(0);
+        var opacity = (Math.random() * 0.35 + 0.25).toFixed(2);
+        h.style.left = left + 'vw';
+        h.style.fontSize = size + 'rem';
+        h.style.color = colors[i % colors.length];
+        h.style.animationDuration = duration + 's';
+        h.style.animationDelay = delay + 's';
+        h.style.setProperty('--sway', sway + 'px');
+        h.style.setProperty('--o', opacity);
+        heartsWrap.appendChild(h);
       }
     }
-    step();
-  }
 
-  function runSequence(){
-    clearTimers();
-    spawnHearts();
+    function typeWriter(el, text, speed, onDone) {
+      el.textContent = '';
+      var i = 0;
+      function step() {
+        if (i <= text.length) {
+          el.textContent = text.slice(0, i);
+          i++;
+          after(speed, step);
+        } else if (onDone) {
+          onDone();
+        }
+      }
+      step();
+    }
 
-    // reset state
-    phrase.classList.remove('enter', 'leave', 'typing');
-    milestone.classList.remove('enter');
-    frame.classList.remove('dissolve', 'hidden');
-    numbersLayer.classList.remove('show');
-    messageOutside.classList.remove('show', 'typing');
-    replayBtn.classList.remove('show');
-    phraseText.textContent = '';
-    loveText.textContent = '';
-    void phrase.offsetWidth;
+    function drawHeart() {
+      heartPath.style.transition = 'stroke-dashoffset 1.4s ease-out';
+      heartPath.style.strokeDashoffset = '0';
+    }
 
-    // 1. phrase fades in, then types itself out
-    phrase.classList.add('enter');
-    phrase.classList.add('typing');
-    after(500, () => {
-      typeWriter(phraseText, PHRASE, 85, () => {
-        // 2. finished typing -> short 3.5s wait, then hide phrase and form the heart
-        after(3500, () => {
-          phrase.classList.remove('typing');
-          phrase.classList.remove('enter');
-          phrase.classList.add('leave');
+    function undrawHeart() {
+      heartPath.style.transition = 'stroke-dashoffset 0.9s ease-in';
+      heartPath.style.strokeDashoffset = String(heartLen);
+    }
 
-          after(300, () => {
-            milestone.classList.add('enter');
-            after(400, () => numbersLayer.classList.add('show'));
+    function runSequence() {
+      clearTimers();
+      spawnHearts();
 
-            // 3. heart finishes forming, holds "8 meses" for a moment,
-            // then undoes/dissolves itself, and the message takes its place
-            after(3600, () => {
-              frame.classList.add('dissolve');
-              numbersLayer.classList.remove('show');
+      phrase.classList.remove('enter', 'leave', 'typing');
+      milestone.classList.remove('enter');
+      frame.classList.remove('dissolve', 'hidden');
+      numbersLayer.classList.remove('show');
+      messageOutside.classList.remove('show', 'typing');
+      replayBtn.classList.remove('show');
+      phraseText.textContent = '';
+      loveText.textContent = '';
+      heartPath.style.transition = 'none';
+      heartPath.style.strokeDashoffset = String(heartLen);
+      void phrase.offsetWidth;
 
-              after(900, () => {
-                frame.classList.add('hidden');
-                messageOutside.classList.add('show');
-                messageOutside.classList.add('typing');
-                typeWriter(loveText, MESSAGE, 55, () => {
-                  messageOutside.classList.remove('typing');
-                  after(600, () => replayBtn.classList.add('show'));
+      phrase.classList.add('enter');
+      phrase.classList.add('typing');
+
+      after(500, function () {
+        typeWriter(phraseText, PHRASE, 85, function () {
+          after(3500, function () {
+            phrase.classList.remove('typing');
+            phrase.classList.remove('enter');
+            phrase.classList.add('leave');
+
+            after(300, function () {
+              milestone.classList.add('enter');
+              after(150, drawHeart);
+              after(400, function () { numbersLayer.classList.add('show'); });
+
+              after(3600, function () {
+                frame.classList.add('dissolve');
+                numbersLayer.classList.remove('show');
+                undrawHeart();
+
+                after(900, function () {
+                  frame.classList.add('hidden');
+                  messageOutside.classList.add('show');
+                  messageOutside.classList.add('typing');
+                  typeWriter(loveText, MESSAGE, 55, function () {
+                    messageOutside.classList.remove('typing');
+                    after(600, function () { replayBtn.classList.add('show'); });
+                  });
                 });
               });
             });
           });
         });
       });
-    });
-  }
+    }
 
-  replayBtn.addEventListener('click', runSequence);
-  runSequence();
-})();
+    replayBtn.addEventListener('click', runSequence);
+    runSequence();
+
+  } catch (err) {
+    // fallback: if anything goes wrong, always show the content statically
+    // instead of leaving a blank screen
+    console.error('Falha na animacao, mostrando versao estatica:', err);
+    var p = document.getElementById('phraseText');
+    var ph = document.getElementById('phrase');
+    var ms = document.getElementById('milestone');
+    var nl = document.getElementById('numbersLayer');
+    var mo = document.getElementById('messageOutside');
+    var lt = document.getElementById('loveText');
+    if (p) p.textContent = 'Feliz nosso dia';
+    if (ph) { ph.style.opacity = '1'; ph.style.position = 'static'; ph.style.transform = 'none'; }
+    if (ms) { ms.style.opacity = '1'; ms.style.transform = 'none'; }
+    if (nl) nl.style.opacity = '1';
+    if (mo) mo.style.opacity = '1';
+    if (lt) lt.textContent = 'Eu te amo Yasmin, com minha alma e meu coração, feliz nosso dia!';
+  }
+});
 </script>
 
 </body>
