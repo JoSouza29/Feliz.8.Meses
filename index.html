@@ -51,7 +51,7 @@ body{
   50%{ background-position:72% 78%; }
 }
 
-/* ---------- floating hearts ---------- */
+/* ---------- ambient rain: hearts + flowers, always behind everything ---------- */
 .hearts{
   position:absolute;
   inset:0;
@@ -139,7 +139,6 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:clamp(0.3rem, 1.4vh, 0.7rem);
 }
 .milestone.enter{
   animation:milestoneIn 1s cubic-bezier(.2,.8,.25,1) forwards;
@@ -149,6 +148,7 @@ body{
   100%{ opacity:1; transform:scale(1); }
 }
 
+/* ---------- heart phase, centered ---------- */
 .frame{
   position:relative;
   width:clamp(230px, 56vw, 380px);
@@ -235,15 +235,18 @@ body{
   padding-left:0.5em;
 }
 
-/* ---------- photo rain, over the heart ---------- */
+/* ---------- photo phase — replaces the heart, same centered spot ---------- */
 .photo-rain{
-  position:absolute;
-  inset:0;
-  z-index:2;
-  display:flex;
+  display:none;
+  position:relative;
+  width:clamp(230px, 56vw, 380px);
+  height:clamp(230px, 56vw, 380px);
   align-items:center;
   justify-content:center;
-  pointer-events:none;
+  flex-shrink:0;
+}
+.photo-rain.active{
+  display:flex;
 }
 .photo-card{
   --dx:0px;
@@ -279,14 +282,15 @@ body{
 
 /* ---------- final romantic scene ---------- */
 .final-scene{
+  display:none;
   position:relative;
   opacity:0;
   transition:opacity 0.6s ease;
-  display:flex;
   flex-direction:column;
   align-items:center;
   padding:clamp(1.2rem, 5vw, 2.2rem);
 }
+.final-scene.active{ display:flex; }
 .final-scene.show{ opacity:1; }
 
 .final-glow{
@@ -405,6 +409,7 @@ body{
     </h1>
 
     <div class="milestone" id="milestone">
+
       <div class="frame" id="frame">
         <svg class="heart-outline" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
           <defs>
@@ -422,9 +427,9 @@ body{
           <div class="number">8</div>
           <div class="label">meses</div>
         </div>
-
-        <div class="photo-rain" id="photoRain" aria-hidden="true"></div>
       </div>
+
+      <div class="photo-rain" id="photoRain" aria-hidden="true"></div>
 
       <div class="final-scene" id="finalScene">
         <div class="final-glow" aria-hidden="true"></div>
@@ -437,6 +442,7 @@ body{
         <span class="sparkle sp3" aria-hidden="true">&#10022;</span>
         <span class="sparkle sp4" aria-hidden="true">&#10023;</span>
       </div>
+
     </div>
   </div>
 
@@ -486,14 +492,17 @@ document.addEventListener('DOMContentLoaded', function () {
     function clearTimers() { for (var t = 0; t < timers.length; t++) { clearTimeout(timers[t]); } timers = []; }
     function after(ms, fn) { timers.push(setTimeout(fn, ms)); }
 
+    // ambient rain of hearts + flowers, behind everything, runs the whole time
     function spawnHearts() {
       heartsWrap.innerHTML = '';
+      var symbols = ['\u2665', '\uD83C\uDF38', '\u2665', '\uD83C\uDF37', '\u2665', '\uD83C\uDF3A'];
       var colors = ['#ffc2d6', '#fff6f8', '#f3cf94', '#ff8fae'];
-      var count = 22;
+      var count = 24;
       for (var i = 0; i < count; i++) {
         var h = document.createElement('span');
         h.className = 'heart-particle';
-        h.textContent = '\u2665';
+        var sym = symbols[i % symbols.length];
+        h.textContent = sym;
         var size = (Math.random() * 1.1 + 0.6).toFixed(2);
         var left = (Math.random() * 100).toFixed(1);
         var duration = (Math.random() * 9 + 9).toFixed(1);
@@ -502,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var opacity = (Math.random() * 0.35 + 0.25).toFixed(2);
         h.style.left = left + 'vw';
         h.style.fontSize = size + 'rem';
-        h.style.color = colors[i % colors.length];
+        if (sym === '\u2665') { h.style.color = colors[i % colors.length]; }
         h.style.animationDuration = duration + 's';
         h.style.animationDelay = delay + 's';
         h.style.setProperty('--sway', sway + 'px');
@@ -536,7 +545,7 @@ document.addEventListener('DOMContentLoaded', function () {
       heartPath.style.strokeDashoffset = String(heartLen);
     }
 
-    // ---------- photo rain: memories dropping in, one by one, over the heart ----------
+    // ---------- photo rain: memories dropping in, one by one, in the heart's place ----------
     var photoCards = [];
     function spawnPhotoCards() {
       photoRain.innerHTML = '';
@@ -616,7 +625,8 @@ document.addEventListener('DOMContentLoaded', function () {
       milestone.classList.remove('enter');
       frame.classList.remove('dissolve', 'hidden');
       numbersLayer.classList.remove('show');
-      finalScene.classList.remove('show');
+      photoRain.classList.remove('active');
+      finalScene.classList.remove('active', 'show');
       replayBtn.classList.remove('show');
       phraseText.textContent = '';
       loveText.textContent = '';
@@ -636,23 +646,29 @@ document.addEventListener('DOMContentLoaded', function () {
             phrase.classList.add('leave');
 
             after(300, function () {
-              // 2. heart forms and "juntos há 8 meses" appears
+              // 2. heart forms, centered, and holds "juntos há 8 meses" alone for a while
               milestone.classList.add('enter');
               after(150, drawHeart);
               after(400, function () { numbersLayer.classList.add('show'); });
 
-              // 3. a little rain of memories drops in, over the heart
-              after(1900, function () {
-                runPhotoRain(function () {
-                  // 4. heart lingers alone a bit longer, then dissolves
-                  after(700, function () {
-                    frame.classList.add('dissolve');
-                    numbersLayer.classList.remove('show');
-                    undrawHeart();
+              after(3800, function () {
+                // 3. the heart dissolves completely before the photos appear
+                frame.classList.add('dissolve');
+                numbersLayer.classList.remove('show');
+                undrawHeart();
 
-                    after(900, function () {
-                      frame.classList.add('hidden');
-                      finalScene.classList.add('show');
+                after(900, function () {
+                  frame.classList.add('hidden');
+
+                  // 4. the photos take the heart's place, one by one
+                  photoRain.classList.add('active');
+                  runPhotoRain(function () {
+                    photoRain.classList.remove('active');
+
+                    // 5. the final, more romantic message screen
+                    after(200, function () {
+                      finalScene.classList.add('active');
+                      after(30, function () { finalScene.classList.add('show'); });
                       burstHearts(finalScene);
                       typeWriter(loveText, MESSAGE, 55, function () {
                         after(600, function () { replayBtn.classList.add('show'); });
@@ -684,7 +700,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (ph) { ph.style.opacity = '1'; ph.style.position = 'static'; ph.style.transform = 'none'; }
     if (ms) { ms.style.opacity = '1'; ms.style.transform = 'none'; }
     if (nl) nl.style.opacity = '1';
-    if (fs) fs.style.opacity = '1';
+    if (fs) { fs.style.display = 'flex'; fs.style.opacity = '1'; }
     if (lt) lt.textContent = 'Eu te amo Yasmin, com minha alma e meu coração, feliz nosso dia!';
   }
 });
