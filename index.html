@@ -235,8 +235,114 @@ body{
   padding-left:0.5em;
 }
 
-/* ---------- the written message, after the heart dissolves ---------- */
+/* ---------- photo rain, over the heart ---------- */
+.photo-rain{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.photo-card{
+  --dx:0px;
+  --rot:0deg;
+  position:absolute;
+  width:clamp(148px, 40vw, 208px);
+  aspect-ratio:4/5;
+  background:#fffdfb;
+  padding:8px 8px 22px 8px;
+  border-radius:7px;
+  box-shadow:0 16px 34px rgba(30,4,14,0.45);
+  opacity:0;
+  transform:translate(var(--dx), -28px) rotate(var(--rot)) scale(0.9);
+  transition:opacity 0.5s ease, transform 0.5s cubic-bezier(.2,.8,.25,1);
+}
+.photo-card.show{
+  opacity:1;
+  transform:translate(var(--dx), 0) rotate(var(--rot)) scale(1);
+}
+.photo-card.leave{
+  opacity:0;
+  transform:translate(var(--dx), 26px) rotate(var(--rot)) scale(0.94);
+  transition:opacity 0.45s ease, transform 0.45s ease-in;
+}
+.photo-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  border-radius:2px;
+  background:#eee;
+}
+
+/* ---------- final romantic scene ---------- */
+.final-scene{
+  position:relative;
+  opacity:0;
+  transition:opacity 0.6s ease;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:clamp(1.2rem, 5vw, 2.2rem);
+}
+.final-scene.show{ opacity:1; }
+
+.final-glow{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:140%;
+  height:170%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(243,207,148,0.30) 0%, rgba(255,95,143,0.16) 45%, transparent 72%);
+  filter:blur(18px);
+  animation:glowPulse 4.2s ease-in-out infinite;
+  z-index:-1;
+  pointer-events:none;
+}
+@keyframes glowPulse{
+  0%,100%{ opacity:0.65; transform:translate(-50%,-50%) scale(0.94); }
+  50%{ opacity:1; transform:translate(-50%,-50%) scale(1.06); }
+}
+
+.final-heart-icon{
+  font-size:clamp(1.15rem, 4vw, 1.7rem);
+  color:var(--gold);
+  margin-bottom:clamp(0.5rem, 2vw, 0.9rem);
+  text-shadow:0 2px 12px rgba(85,8,31,0.5);
+  animation:heartbeat 2.2s ease-in-out infinite;
+}
+
+.sparkle{
+  position:absolute;
+  color:var(--gold);
+  font-size:clamp(0.85rem, 2.8vw, 1.2rem);
+  opacity:0;
+  animation:twinkle 2.6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes twinkle{
+  0%, 100%{ opacity:0; transform:scale(0.5) rotate(0deg); }
+  50%{ opacity:1; transform:scale(1.05) rotate(12deg); }
+}
+.sp1{ top:-2%;  left:4%;   animation-delay:0s;    color:var(--light-pink); }
+.sp2{ top:6%;   right:2%;  animation-delay:0.7s;  }
+.sp3{ bottom:8%; left:-2%; animation-delay:1.4s;  }
+.sp4{ bottom:-4%; right:8%; animation-delay:2.0s; color:var(--light-pink); }
+
+.love-burst{
+  position:absolute;
+  left:50%;
+  top:50%;
+  font-size:1rem;
+  pointer-events:none;
+  will-change:transform, opacity;
+}
+
 .message-outside{
+  position:relative;
   font-family:'Caveat', 'Segoe Script', cursive;
   font-weight:600;
   font-size:clamp(1.3rem, 5.2vw, 2.3rem);
@@ -245,10 +351,7 @@ body{
   text-shadow:0 4px 20px rgba(85,8,31,0.45);
   max-width:84vw;
   text-align:center;
-  opacity:0;
-  transition:opacity 0.5s ease;
 }
-.message-outside.show{ opacity:1; }
 
 /* ---------- replay control ---------- */
 .replay{
@@ -285,6 +388,8 @@ body{
   .stage{ animation:none; }
   .number{ animation:none; }
   .heart-particle{ animation:none; display:none; }
+  .final-glow{ animation:none; }
+  .sparkle{ animation:none; opacity:0.8; }
 }
 </style>
 </head>
@@ -317,10 +422,20 @@ body{
           <div class="number">8</div>
           <div class="label">meses</div>
         </div>
+
+        <div class="photo-rain" id="photoRain" aria-hidden="true"></div>
       </div>
 
-      <div class="message-outside" id="messageOutside">
-        <span id="loveText"></span><span class="cursor" id="loveCursor">|</span>
+      <div class="final-scene" id="finalScene">
+        <div class="final-glow" aria-hidden="true"></div>
+        <div class="final-heart-icon" aria-hidden="true">&#9829;</div>
+        <div class="message-outside" id="messageOutside">
+          <span id="loveText"></span><span class="cursor" id="loveCursor">|</span>
+        </div>
+        <span class="sparkle sp1" aria-hidden="true">&#10022;</span>
+        <span class="sparkle sp2" aria-hidden="true">&#10023;</span>
+        <span class="sparkle sp3" aria-hidden="true">&#10022;</span>
+        <span class="sparkle sp4" aria-hidden="true">&#10023;</span>
       </div>
     </div>
   </div>
@@ -336,6 +451,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var milestone = document.getElementById('milestone');
     var frame = document.getElementById('frame');
     var numbersLayer = document.getElementById('numbersLayer');
+    var photoRain = document.getElementById('photoRain');
+    var finalScene = document.getElementById('finalScene');
     var messageOutside = document.getElementById('messageOutside');
     var loveText = document.getElementById('loveText');
     var replayBtn = document.getElementById('replay');
@@ -345,7 +462,17 @@ document.addEventListener('DOMContentLoaded', function () {
     var PHRASE = 'Feliz nosso dia';
     var MESSAGE = 'Eu te amo Yasmin, com minha alma e meu coração, feliz nosso dia!';
 
-    if (!phrase || !phraseText || !milestone || !frame || !numbersLayer || !messageOutside || !loveText || !replayBtn || !heartsWrap || !heartPath) {
+    var PHOTOS = [
+      { src: 'https://i.ibb.co/wrCQs5T6/20251206-201620.jpg', alt: 'lembrança 1' },
+      { src: 'https://i.ibb.co/CKKY1f2L/IMG-20250518-162228-374.webp', alt: 'lembrança 2' },
+      { src: 'https://i.ibb.co/FkVxWMzh/IMG-20250518-163935-566.webp', alt: 'lembrança 3' },
+      { src: 'https://i.ibb.co/S4TD8ssf/IMG-20260329-WA0055.jpg', alt: 'lembrança 4' },
+      { src: 'https://i.ibb.co/V0Fht1nX/IMG-20260612-WA0009.jpg', alt: 'lembrança 5' },
+      { src: 'https://i.ibb.co/DHM7mxMv/IMG-20260612-WA0010.jpg', alt: 'lembrança 6' },
+      { src: 'https://i.ibb.co/twnBXw83/IMG-20260612-WA0012.jpg', alt: 'lembrança 7' }
+    ];
+
+    if (!phrase || !phraseText || !milestone || !frame || !numbersLayer || !photoRain || !finalScene || !messageOutside || !loveText || !replayBtn || !heartsWrap || !heartPath) {
       throw new Error('elemento essencial nao encontrado');
     }
 
@@ -409,15 +536,87 @@ document.addEventListener('DOMContentLoaded', function () {
       heartPath.style.strokeDashoffset = String(heartLen);
     }
 
+    // ---------- photo rain: memories dropping in, one by one, over the heart ----------
+    var photoCards = [];
+    function spawnPhotoCards() {
+      photoRain.innerHTML = '';
+      photoCards = [];
+      for (var i = 0; i < PHOTOS.length; i++) {
+        var card = document.createElement('div');
+        card.className = 'photo-card';
+        var dx = (Math.random() * 26 - 13).toFixed(0);
+        var rot = (Math.random() * 12 - 6).toFixed(1);
+        card.style.setProperty('--dx', dx + 'px');
+        card.style.setProperty('--rot', rot + 'deg');
+        var img = document.createElement('img');
+        img.src = PHOTOS[i].src;
+        img.alt = PHOTOS[i].alt;
+        img.loading = 'eager';
+        img.decoding = 'async';
+        card.appendChild(img);
+        photoRain.appendChild(card);
+        photoCards.push(card);
+      }
+    }
+
+    function runPhotoRain(onAllDone) {
+      var HOLD = 950;
+      var GAP = 150;
+      function showPhoto(i) {
+        if (i >= photoCards.length) { onAllDone(); return; }
+        var card = photoCards[i];
+        card.classList.add('show');
+        after(HOLD, function () {
+          card.classList.remove('show');
+          card.classList.add('leave');
+          after(450, function () {
+            after(GAP, function () { showPhoto(i + 1); });
+          });
+        });
+      }
+      showPhoto(0);
+    }
+
+    // ---------- little heart burst for the final scene ----------
+    function burstHearts(container) {
+      var count = 12;
+      var colors = ['#ffc2d6', '#fff6f8', '#f3cf94'];
+      for (var i = 0; i < count; i++) {
+        (function () {
+          var s = document.createElement('span');
+          s.className = 'love-burst';
+          s.textContent = '\u2665';
+          var angle = Math.random() * Math.PI * 2;
+          var dist = 60 + Math.random() * 90;
+          var dx = Math.cos(angle) * dist;
+          var dy = Math.sin(angle) * dist;
+          var size = (0.7 + Math.random() * 0.9).toFixed(2);
+          s.style.fontSize = size + 'rem';
+          s.style.color = colors[i % colors.length];
+          container.appendChild(s);
+          if (s.animate) {
+            var anim = s.animate([
+              { transform: 'translate(-50%,-50%) scale(0.4)', opacity: 1 },
+              { transform: 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px)) scale(1)', opacity: 0 }
+            ], { duration: 1300 + Math.random() * 500, delay: Math.random() * 200, easing: 'ease-out', fill: 'forwards' });
+            anim.onfinish = function () { s.remove(); };
+          } else {
+            after(1800, function () { s.remove(); });
+          }
+        })();
+      }
+    }
+
     function runSequence() {
       clearTimers();
       spawnHearts();
+      spawnPhotoCards();
 
       phrase.classList.remove('enter', 'leave', 'typing');
       milestone.classList.remove('enter');
       frame.classList.remove('dissolve', 'hidden');
       numbersLayer.classList.remove('show');
-      messageOutside.classList.remove('show', 'typing');
+      finalScene.classList.remove('show');
       replayBtn.classList.remove('show');
       phraseText.textContent = '';
       loveText.textContent = '';
@@ -425,33 +624,40 @@ document.addEventListener('DOMContentLoaded', function () {
       heartPath.style.strokeDashoffset = String(heartLen);
       void phrase.offsetWidth;
 
+      // 1. phrase fades in, types itself out, holds briefly
       phrase.classList.add('enter');
       phrase.classList.add('typing');
 
       after(500, function () {
         typeWriter(phraseText, PHRASE, 85, function () {
-          after(3500, function () {
+          after(2200, function () {
             phrase.classList.remove('typing');
             phrase.classList.remove('enter');
             phrase.classList.add('leave');
 
             after(300, function () {
+              // 2. heart forms and "juntos há 8 meses" appears
               milestone.classList.add('enter');
               after(150, drawHeart);
               after(400, function () { numbersLayer.classList.add('show'); });
 
-              after(3600, function () {
-                frame.classList.add('dissolve');
-                numbersLayer.classList.remove('show');
-                undrawHeart();
+              // 3. a little rain of memories drops in, over the heart
+              after(1900, function () {
+                runPhotoRain(function () {
+                  // 4. heart lingers alone a bit longer, then dissolves
+                  after(700, function () {
+                    frame.classList.add('dissolve');
+                    numbersLayer.classList.remove('show');
+                    undrawHeart();
 
-                after(900, function () {
-                  frame.classList.add('hidden');
-                  messageOutside.classList.add('show');
-                  messageOutside.classList.add('typing');
-                  typeWriter(loveText, MESSAGE, 55, function () {
-                    messageOutside.classList.remove('typing');
-                    after(600, function () { replayBtn.classList.add('show'); });
+                    after(900, function () {
+                      frame.classList.add('hidden');
+                      finalScene.classList.add('show');
+                      burstHearts(finalScene);
+                      typeWriter(loveText, MESSAGE, 55, function () {
+                        after(600, function () { replayBtn.classList.add('show'); });
+                      });
+                    });
                   });
                 });
               });
@@ -472,13 +678,13 @@ document.addEventListener('DOMContentLoaded', function () {
     var ph = document.getElementById('phrase');
     var ms = document.getElementById('milestone');
     var nl = document.getElementById('numbersLayer');
-    var mo = document.getElementById('messageOutside');
+    var fs = document.getElementById('finalScene');
     var lt = document.getElementById('loveText');
     if (p) p.textContent = 'Feliz nosso dia';
     if (ph) { ph.style.opacity = '1'; ph.style.position = 'static'; ph.style.transform = 'none'; }
     if (ms) { ms.style.opacity = '1'; ms.style.transform = 'none'; }
     if (nl) nl.style.opacity = '1';
-    if (mo) mo.style.opacity = '1';
+    if (fs) fs.style.opacity = '1';
     if (lt) lt.textContent = 'Eu te amo Yasmin, com minha alma e meu coração, feliz nosso dia!';
   }
 });
