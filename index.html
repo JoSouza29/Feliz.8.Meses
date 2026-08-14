@@ -6,7 +6,7 @@
 <title>Feliz nosso dia — 8 meses</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Josefin+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --vivid-red:   #e8203d;
@@ -16,6 +16,7 @@
   --deep-wine:   #55081f;
   --gold:        #f3cf94;
   --cream:       #fff6f8;
+  --ink:         #5c1a2e;
 }
 
 *{ margin:0; padding:0; box-sizing:border-box; }
@@ -45,10 +46,18 @@ body{
   background-size:220% 220%;
   animation:driftBg 16s ease-in-out infinite;
 }
+.stage.shake{ animation:driftBg 16s ease-in-out infinite, impactShake 0.4s ease; }
 
 @keyframes driftBg{
   0%,100%{ background-position:28% 20%; }
   50%{ background-position:72% 78%; }
+}
+@keyframes impactShake{
+  0%,100%{ transform:translate(0,0); }
+  20%{ transform:translate(-5px,3px); }
+  40%{ transform:translate(5px,-3px); }
+  60%{ transform:translate(-4px,2px); }
+  80%{ transform:translate(4px,-1px); }
 }
 
 /* ---------- ambient rain: hearts + flowers, always behind everything ---------- */
@@ -117,10 +126,10 @@ body{
 @keyframes blink{ 50%{ opacity:0; } }
 
 .phrase.enter{
-  animation:phraseIn 0.7s cubic-bezier(.2,.8,.25,1) forwards;
+  animation:phraseIn 0.6s cubic-bezier(.2,.8,.25,1) forwards;
 }
 .phrase.leave{
-  animation:phraseOut 0.85s ease-in forwards;
+  animation:phraseOut 0.65s ease-in forwards;
 }
 @keyframes phraseIn{
   0%{ opacity:0; transform:scale(0.92) translateY(8px); }
@@ -139,6 +148,7 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
+  gap:clamp(0.4rem, 1.8vh, 0.9rem);
 }
 .milestone.enter{
   animation:milestoneIn 1s cubic-bezier(.2,.8,.25,1) forwards;
@@ -159,7 +169,7 @@ body{
   flex-shrink:0;
 }
 .frame.dissolve{
-  animation:frameDissolve 0.9s ease-in forwards;
+  animation:frameDissolve 1.3s ease-in forwards;
 }
 @keyframes frameDissolve{
   0%{ opacity:1; filter:blur(0px); transform:scale(1); }
@@ -182,7 +192,7 @@ body{
   stroke:url(#heartGrad);
   stroke-width:1.4;
   stroke-linecap:round;
-  transition:stroke-dashoffset 1.4s ease-out;
+  transition:stroke-dashoffset 1.9s ease-out;
 }
 
 .numbers-layer{
@@ -235,7 +245,25 @@ body{
   padding-left:0.5em;
 }
 
-/* ---------- photo phase — replaces the heart, same centered spot ---------- */
+/* ---------- caption above the photos ---------- */
+.photo-caption{
+  display:none;
+  font-family:'Cormorant Garamond', Georgia, serif;
+  font-style:italic;
+  font-weight:600;
+  font-size:clamp(0.92rem, 3.5vw, 1.25rem);
+  line-height:1.5;
+  color:var(--cream);
+  text-shadow:0 4px 18px rgba(85,8,31,0.5);
+  max-width:82vw;
+  text-align:center;
+  opacity:0;
+  transition:opacity 0.6s ease;
+}
+.photo-caption.active{ display:block; }
+.photo-caption.show{ opacity:1; }
+
+/* ---------- photo phase — same centered spot as the heart ---------- */
 .photo-rain{
   display:none;
   position:relative;
@@ -260,7 +288,7 @@ body{
   box-shadow:0 16px 34px rgba(30,4,14,0.45);
   opacity:0;
   transform:translate(var(--dx), -28px) rotate(var(--rot)) scale(0.9);
-  transition:opacity 0.5s ease, transform 0.5s cubic-bezier(.2,.8,.25,1);
+  transition:opacity 0.65s ease, transform 0.65s cubic-bezier(.2,.8,.25,1);
 }
 .photo-card.show{
   opacity:1;
@@ -269,7 +297,7 @@ body{
 .photo-card.leave{
   opacity:0;
   transform:translate(var(--dx), 26px) rotate(var(--rot)) scale(0.94);
-  transition:opacity 0.45s ease, transform 0.45s ease-in;
+  transition:opacity 0.6s ease, transform 0.6s ease-in;
 }
 .photo-card img{
   width:100%;
@@ -280,7 +308,116 @@ body{
   background:#eee;
 }
 
-/* ---------- final romantic scene ---------- */
+/* ---------- truco scene: K de paus mata K de copas ---------- */
+.truco-scene{
+  display:none;
+  position:relative;
+  width:clamp(230px, 74vw, 420px);
+  height:clamp(230px, 60vw, 340px);
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  opacity:1;
+  transition:opacity 0.5s ease;
+}
+.truco-scene.active{ display:flex; }
+.truco-scene.fade-out{ opacity:0; }
+
+.truco-shout{
+  position:absolute;
+  top:2%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0.1) rotate(-8deg);
+  font-family:'Josefin Sans', Arial, sans-serif;
+  font-weight:700;
+  font-size:clamp(2rem, 10vw, 4rem);
+  letter-spacing:0.02em;
+  color:#fff3d6;
+  -webkit-text-stroke:2px #8a0e24;
+  text-stroke:2px #8a0e24;
+  text-shadow:3px 3px 0 #8a0e24, -2px 2px 0 #8a0e24, 0 0 26px rgba(255,205,110,0.85);
+  opacity:0;
+  white-space:nowrap;
+  z-index:6;
+}
+.truco-shout.shout{
+  animation:shoutIn 0.55s cubic-bezier(.25,1.6,.4,1) forwards;
+}
+@keyframes shoutIn{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(0.1) rotate(-12deg); }
+  55%{ opacity:1; transform:translate(-50%,-50%) scale(1.3) rotate(5deg); }
+  75%{ transform:translate(-50%,-50%) scale(0.9) rotate(-4deg); }
+  100%{ opacity:1; transform:translate(-50%,-50%) scale(1.05) rotate(0deg); }
+}
+
+.truco-card{
+  position:absolute;
+  width:clamp(92px, 26vw, 132px);
+  aspect-ratio:0.68;
+  background:#fffaf3;
+  border-radius:9px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.55);
+  border:1px solid rgba(0,0,0,0.08);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:8px 10px;
+  opacity:0;
+}
+.truco-card .rank{
+  font-family:Georgia, 'Times New Roman', serif;
+  font-weight:700;
+  font-size:clamp(1.1rem, 4vw, 1.55rem);
+  line-height:1;
+}
+.truco-card .suit-mid{
+  font-size:clamp(1.7rem, 6.5vw, 2.5rem);
+  align-self:center;
+}
+.truco-card .rank.bottom{
+  align-self:flex-end;
+  transform:rotate(180deg);
+}
+.card-hearts .rank, .card-hearts .suit-mid{ color:#d21c3c; }
+.card-clubs .rank, .card-clubs .suit-mid{ color:#161616; }
+
+.card-hearts{
+  transform:translate(-160%, -70%) rotate(-38deg) scale(0.7);
+  z-index:1;
+}
+.card-hearts.thrown{
+  animation:throwHearts 0.85s cubic-bezier(.3,.85,.4,1) forwards;
+}
+@keyframes throwHearts{
+  0%{ opacity:0; transform:translate(-160%, -70%) rotate(-38deg) scale(0.7); }
+  70%{ opacity:1; transform:translate(4%, 3%) rotate(9deg) scale(1.06); }
+  100%{ opacity:1; transform:translate(-6%, 0%) rotate(-7deg) scale(1); }
+}
+
+.card-clubs{
+  transform:translate(160%, -85%) rotate(40deg) scale(0.7);
+  z-index:2;
+}
+.card-clubs.thrown{
+  animation:throwClubs 0.8s cubic-bezier(.3,.85,.4,1) forwards;
+}
+@keyframes throwClubs{
+  0%{ opacity:0; transform:translate(160%, -85%) rotate(40deg) scale(0.7); }
+  65%{ opacity:1; transform:translate(-4%, 2%) rotate(-11deg) scale(1.1); }
+  100%{ opacity:1; transform:translate(9%, 4%) rotate(9deg) scale(1); }
+}
+
+.impact-burst{
+  position:absolute;
+  left:50%;
+  top:36%;
+  font-size:1rem;
+  pointer-events:none;
+  will-change:transform, opacity;
+  z-index:5;
+}
+
+/* ---------- final scene: a little decorated letter ---------- */
 .final-scene{
   display:none;
   position:relative;
@@ -288,7 +425,7 @@ body{
   transition:opacity 0.6s ease;
   flex-direction:column;
   align-items:center;
-  padding:clamp(1.2rem, 5vw, 2.2rem);
+  padding:clamp(0.8rem, 4vw, 1.6rem);
 }
 .final-scene.active{ display:flex; }
 .final-scene.show{ opacity:1; }
@@ -297,7 +434,7 @@ body{
   position:absolute;
   left:50%;
   top:50%;
-  width:140%;
+  width:150%;
   height:170%;
   transform:translate(-50%,-50%);
   background:radial-gradient(circle, rgba(243,207,148,0.30) 0%, rgba(255,95,143,0.16) 45%, transparent 72%);
@@ -312,11 +449,65 @@ body{
 }
 
 .final-heart-icon{
-  font-size:clamp(1.15rem, 4vw, 1.7rem);
+  font-size:clamp(1.1rem, 3.6vw, 1.6rem);
   color:var(--gold);
-  margin-bottom:clamp(0.5rem, 2vw, 0.9rem);
+  margin-bottom:clamp(0.5rem, 2vw, 0.85rem);
   text-shadow:0 2px 12px rgba(85,8,31,0.5);
   animation:heartbeat 2.2s ease-in-out infinite;
+}
+
+.letter-card{
+  position:relative;
+  width:clamp(260px, 82vw, 420px);
+  min-height:clamp(200px, 42vh, 300px);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 28px,
+      rgba(120,150,195,0.38) 29px, rgba(120,150,195,0.38) 30px
+    ),
+    linear-gradient(155deg, #fffdf6 0%, #fff8ec 55%, #fff1de 100%);
+  border-radius:5px;
+  box-shadow:0 22px 48px rgba(20,2,8,0.55), 0 2px 0 rgba(255,255,255,0.5) inset;
+  padding:2.4em 1.5em 1.6em 2.1em;
+  transform:rotate(-1.6deg);
+}
+.letter-card::before{
+  content:'';
+  position:absolute;
+  left:1.55em;
+  top:0;
+  bottom:0;
+  width:1.5px;
+  background:rgba(214,51,90,0.32);
+}
+.tape{
+  position:absolute;
+  width:58px;
+  height:22px;
+  opacity:0.8;
+  box-shadow:0 3px 6px rgba(0,0,0,0.2);
+}
+.tape-left{
+  top:-11px;
+  left:16px;
+  background:rgba(255,196,145,0.88);
+  transform:rotate(-9deg);
+}
+.tape-right{
+  top:-9px;
+  right:12px;
+  background:rgba(255,140,170,0.82);
+  transform:rotate(7deg);
+}
+.card-sticker{
+  position:absolute;
+  bottom:-12px;
+  right:18px;
+  font-size:1.5rem;
+  color:var(--vivid-red);
+  transform:rotate(-12deg);
+  text-shadow:0 2px 6px rgba(0,0,0,0.25);
 }
 
 .sparkle{
@@ -331,10 +522,10 @@ body{
   0%, 100%{ opacity:0; transform:scale(0.5) rotate(0deg); }
   50%{ opacity:1; transform:scale(1.05) rotate(12deg); }
 }
-.sp1{ top:-2%;  left:4%;   animation-delay:0s;    color:var(--light-pink); }
-.sp2{ top:6%;   right:2%;  animation-delay:0.7s;  }
-.sp3{ bottom:8%; left:-2%; animation-delay:1.4s;  }
-.sp4{ bottom:-4%; right:8%; animation-delay:2.0s; color:var(--light-pink); }
+.sp1{ top:-3%;  left:2%;   animation-delay:0s;    color:var(--light-pink); }
+.sp2{ top:4%;   right:0%;  animation-delay:0.7s;  }
+.sp3{ bottom:4%; left:-3%; animation-delay:1.4s;  }
+.sp4{ bottom:-4%; right:4%; animation-delay:2.0s; color:var(--light-pink); }
 
 .love-burst{
   position:absolute;
@@ -349,12 +540,11 @@ body{
   position:relative;
   font-family:'Caveat', 'Segoe Script', cursive;
   font-weight:600;
-  font-size:clamp(1.3rem, 5.2vw, 2.3rem);
-  line-height:1.45;
-  color:var(--cream);
-  text-shadow:0 4px 20px rgba(85,8,31,0.45);
-  max-width:84vw;
-  text-align:center;
+  font-size:1.32rem;
+  line-height:30px;
+  color:var(--ink);
+  text-align:left;
+  width:100%;
 }
 
 /* ---------- replay control ---------- */
@@ -429,13 +619,34 @@ body{
         </div>
       </div>
 
+      <div class="photo-caption" id="photoCaption">8 meses, 243 dias, da melhor escolha dos meus dias, da minha vida... Dividir ela contigo...</div>
+
       <div class="photo-rain" id="photoRain" aria-hidden="true"></div>
+
+      <div class="truco-scene" id="trucoScene">
+        <div class="truco-shout" id="trucoShout">É ZAAAPPP!!!</div>
+        <div class="truco-card card-hearts" id="cardHearts">
+          <span class="rank">K</span>
+          <span class="suit-mid">&#9829;</span>
+          <span class="rank bottom">K</span>
+        </div>
+        <div class="truco-card card-clubs" id="cardClubs">
+          <span class="rank">K</span>
+          <span class="suit-mid">&#9827;</span>
+          <span class="rank bottom">K</span>
+        </div>
+      </div>
 
       <div class="final-scene" id="finalScene">
         <div class="final-glow" aria-hidden="true"></div>
         <div class="final-heart-icon" aria-hidden="true">&#9829;</div>
-        <div class="message-outside" id="messageOutside">
-          <span id="loveText"></span><span class="cursor" id="loveCursor">|</span>
+        <div class="letter-card">
+          <span class="tape tape-left" aria-hidden="true"></span>
+          <span class="tape tape-right" aria-hidden="true"></span>
+          <div class="message-outside" id="messageOutside">
+            <span id="loveText"></span><span class="cursor" id="loveCursor">|</span>
+          </div>
+          <span class="card-sticker" aria-hidden="true">&#9829;</span>
         </div>
         <span class="sparkle sp1" aria-hidden="true">&#10022;</span>
         <span class="sparkle sp2" aria-hidden="true">&#10023;</span>
@@ -452,12 +663,18 @@ body{
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   try {
+    var stage = document.getElementById('stage');
     var phrase = document.getElementById('phrase');
     var phraseText = document.getElementById('phraseText');
     var milestone = document.getElementById('milestone');
     var frame = document.getElementById('frame');
     var numbersLayer = document.getElementById('numbersLayer');
+    var photoCaption = document.getElementById('photoCaption');
     var photoRain = document.getElementById('photoRain');
+    var trucoScene = document.getElementById('trucoScene');
+    var trucoShout = document.getElementById('trucoShout');
+    var cardHearts = document.getElementById('cardHearts');
+    var cardClubs = document.getElementById('cardClubs');
     var finalScene = document.getElementById('finalScene');
     var messageOutside = document.getElementById('messageOutside');
     var loveText = document.getElementById('loveText');
@@ -478,7 +695,7 @@ document.addEventListener('DOMContentLoaded', function () {
       { src: 'https://i.ibb.co/twnBXw83/IMG-20260612-WA0012.jpg', alt: 'lembrança 7' }
     ];
 
-    if (!phrase || !phraseText || !milestone || !frame || !numbersLayer || !photoRain || !finalScene || !messageOutside || !loveText || !replayBtn || !heartsWrap || !heartPath) {
+    if (!phrase || !phraseText || !milestone || !frame || !numbersLayer || !photoCaption || !photoRain || !trucoScene || !trucoShout || !cardHearts || !cardClubs || !finalScene || !messageOutside || !loveText || !replayBtn || !heartsWrap || !heartPath) {
       throw new Error('elemento essencial nao encontrado');
     }
 
@@ -536,12 +753,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function drawHeart() {
-      heartPath.style.transition = 'stroke-dashoffset 1.4s ease-out';
+      heartPath.style.transition = 'stroke-dashoffset 1.9s ease-out';
       heartPath.style.strokeDashoffset = '0';
     }
 
     function undrawHeart() {
-      heartPath.style.transition = 'stroke-dashoffset 0.9s ease-in';
+      heartPath.style.transition = 'stroke-dashoffset 1.3s ease-in';
       heartPath.style.strokeDashoffset = String(heartLen);
     }
 
@@ -569,8 +786,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function runPhotoRain(onAllDone) {
-      var HOLD = 950;
-      var GAP = 150;
+      var HOLD = 1300;
+      var GAP = 250;
       function showPhoto(i) {
         if (i >= photoCards.length) { onAllDone(); return; }
         var card = photoCards[i];
@@ -578,7 +795,7 @@ document.addEventListener('DOMContentLoaded', function () {
         after(HOLD, function () {
           card.classList.remove('show');
           card.classList.add('leave');
-          after(450, function () {
+          after(600, function () {
             after(GAP, function () { showPhoto(i + 1); });
           });
         });
@@ -586,33 +803,31 @@ document.addEventListener('DOMContentLoaded', function () {
       showPhoto(0);
     }
 
-    // ---------- little heart burst for the final scene ----------
-    function burstHearts(container) {
-      var count = 12;
-      var colors = ['#ffc2d6', '#fff6f8', '#f3cf94'];
+    // ---------- generic little burst of symbols ----------
+    function burstSymbols(container, symbols, count, colors, className, spread) {
       for (var i = 0; i < count; i++) {
-        (function () {
+        (function (idx) {
           var s = document.createElement('span');
-          s.className = 'love-burst';
-          s.textContent = '\u2665';
+          s.className = className;
+          s.textContent = symbols[idx % symbols.length];
           var angle = Math.random() * Math.PI * 2;
-          var dist = 60 + Math.random() * 90;
+          var dist = spread.min + Math.random() * (spread.max - spread.min);
           var dx = Math.cos(angle) * dist;
           var dy = Math.sin(angle) * dist;
           var size = (0.7 + Math.random() * 0.9).toFixed(2);
           s.style.fontSize = size + 'rem';
-          s.style.color = colors[i % colors.length];
+          s.style.color = colors[idx % colors.length];
           container.appendChild(s);
           if (s.animate) {
             var anim = s.animate([
               { transform: 'translate(-50%,-50%) scale(0.4)', opacity: 1 },
               { transform: 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px)) scale(1)', opacity: 0 }
-            ], { duration: 1300 + Math.random() * 500, delay: Math.random() * 200, easing: 'ease-out', fill: 'forwards' });
+            ], { duration: 1200 + Math.random() * 500, delay: Math.random() * 150, easing: 'ease-out', fill: 'forwards' });
             anim.onfinish = function () { s.remove(); };
           } else {
-            after(1800, function () { s.remove(); });
+            after(1700, function () { s.remove(); });
           }
-        })();
+        })(i);
       }
     }
 
@@ -625,7 +840,12 @@ document.addEventListener('DOMContentLoaded', function () {
       milestone.classList.remove('enter');
       frame.classList.remove('dissolve', 'hidden');
       numbersLayer.classList.remove('show');
+      photoCaption.classList.remove('active', 'show');
       photoRain.classList.remove('active');
+      trucoScene.classList.remove('active', 'fade-out');
+      trucoShout.classList.remove('shout');
+      cardHearts.classList.remove('thrown');
+      cardClubs.classList.remove('thrown');
       finalScene.classList.remove('active', 'show');
       replayBtn.classList.remove('show');
       phraseText.textContent = '';
@@ -634,18 +854,18 @@ document.addEventListener('DOMContentLoaded', function () {
       heartPath.style.strokeDashoffset = String(heartLen);
       void phrase.offsetWidth;
 
-      // 1. phrase fades in, types itself out, holds briefly
+      // 1. phrase fades in, types itself out fairly quickly
       phrase.classList.add('enter');
       phrase.classList.add('typing');
 
-      after(500, function () {
-        typeWriter(phraseText, PHRASE, 85, function () {
-          after(2200, function () {
+      after(300, function () {
+        typeWriter(phraseText, PHRASE, 65, function () {
+          after(1400, function () {
             phrase.classList.remove('typing');
             phrase.classList.remove('enter');
             phrase.classList.add('leave');
 
-            after(300, function () {
+            after(280, function () {
               // 2. heart forms, centered, and holds "juntos há 8 meses" alone for a while
               milestone.classList.add('enter');
               after(150, drawHeart);
@@ -657,21 +877,47 @@ document.addEventListener('DOMContentLoaded', function () {
                 numbersLayer.classList.remove('show');
                 undrawHeart();
 
-                after(900, function () {
+                after(1300, function () {
                   frame.classList.add('hidden');
 
-                  // 4. the photos take the heart's place, one by one
+                  // 4. caption + photos, one by one, in the heart's place
+                  photoCaption.classList.add('active');
+                  after(60, function () { photoCaption.classList.add('show'); });
                   photoRain.classList.add('active');
+
                   runPhotoRain(function () {
                     photoRain.classList.remove('active');
+                    photoCaption.classList.remove('show');
 
-                    // 5. the final, more romantic message screen
-                    after(200, function () {
-                      finalScene.classList.add('active');
-                      after(30, function () { finalScene.classList.add('show'); });
-                      burstHearts(finalScene);
-                      typeWriter(loveText, MESSAGE, 55, function () {
-                        after(600, function () { replayBtn.classList.add('show'); });
+                    after(600, function () {
+                      photoCaption.classList.remove('active');
+
+                      // 5. truco scene: K de paus mata o K de copas
+                      trucoScene.classList.add('active');
+                      after(350, function () { cardHearts.classList.add('thrown'); });
+                      after(1050, function () {
+                        cardClubs.classList.add('thrown');
+                        stage.classList.add('shake');
+                        after(450, function () { stage.classList.remove('shake'); });
+                        after(150, function () {
+                          trucoShout.classList.add('shout');
+                          burstSymbols(trucoScene, ['\u2726', '\u2605'], 10, ['#f3cf94', '#fff3d6', '#ffdca1'], 'impact-burst', { min: 50, max: 120 });
+                        });
+                      });
+
+                      after(3300, function () {
+                        trucoScene.classList.add('fade-out');
+                        after(500, function () {
+                          trucoScene.classList.remove('active', 'fade-out');
+
+                          // 6. the final letter, decorated, writing itself
+                          finalScene.classList.add('active');
+                          after(30, function () { finalScene.classList.add('show'); });
+                          burstSymbols(finalScene, ['\u2665'], 12, ['#ffc2d6', '#fff6f8', '#f3cf94'], 'love-burst', { min: 60, max: 150 });
+                          typeWriter(loveText, MESSAGE, 55, function () {
+                            after(600, function () { replayBtn.classList.add('show'); });
+                          });
+                        });
                       });
                     });
                   });
