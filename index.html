@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Feliz nosso dia, 8 meses 🤍</title>
+<title>Feliz nosso dia — 8 meses</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,6 +23,8 @@
 
 html, body{
   min-height:100%;
+  min-height:100vh;
+  min-height:100dvh;
   width:100%;
   overflow-x:hidden;
   overflow-y:auto;
@@ -38,6 +40,8 @@ body{
   position:relative;
   width:100%;
   min-height:100%;
+  min-height:100vh;
+  min-height:100dvh;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -302,10 +306,10 @@ body{
 .photo-card img{
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit:contain;
   display:block;
   border-radius:2px;
-  background:#eee;
+  background:#fffdfb;
 }
 
 /* ---------- truco scene: K de paus mata K de copas ---------- */
@@ -458,24 +462,25 @@ body{
 
 .letter-card{
   position:relative;
-  width:clamp(260px, 82vw, 420px);
-  min-height:clamp(200px, 42vh, 300px);
+  width:clamp(280px, 88vw, 480px);
+  min-height:clamp(260px, 50vh, 640px);
   background:
     repeating-linear-gradient(
       to bottom,
-      transparent 0px, transparent 25px,
-      rgba(120,150,195,0.38) 26px, rgba(120,150,195,0.38) 27px
+      transparent 0px, transparent 31px,
+      rgba(120,150,195,0.4) 32px, rgba(120,150,195,0.4) 32px
     ),
     linear-gradient(155deg, #fffdf6 0%, #fff8ec 55%, #fff1de 100%);
+  background-position: 0 46px, 0 0;
   border-radius:5px;
   box-shadow:0 22px 48px rgba(20,2,8,0.55), 0 2px 0 rgba(255,255,255,0.5) inset;
-  padding:2.4em 1.5em 1.6em 2.1em;
+  padding:46px 24px 30px 34px;
   transform:rotate(-1.6deg);
 }
 .letter-card::before{
   content:'';
   position:absolute;
-  left:1.55em;
+  left:26px;
   top:0;
   bottom:0;
   width:1.5px;
@@ -551,13 +556,16 @@ body{
   position:relative;
   font-family:'Caveat', 'Segoe Script', cursive;
   font-weight:600;
-  font-size:1.18rem;
-  line-height:27px;
   color:var(--ink);
   text-align:left;
   width:100%;
-  white-space:pre-line;
 }
+.line-p{
+  margin:0 0 32px 0;
+  font-size:1.32rem;
+  line-height:32px;
+}
+.line-p:last-child{ margin-bottom:0; }
 
 /* ---------- replay control ---------- */
 .replay{
@@ -656,8 +664,11 @@ body{
           <span class="tape tape-left" aria-hidden="true"></span>
           <span class="tape tape-right" aria-hidden="true"></span>
           <div class="message-outside" id="messageOutside">
-            <span id="loveText"></span><span class="cursor" id="loveCursor">|</span>
+            <p class="line-p" id="linePara1"></p>
+            <p class="line-p" id="linePara2"></p>
+            <p class="line-p" id="linePara3"></p>
           </div>
+          <span class="cursor" id="loveCursor">|</span>
           <span class="card-sticker" aria-hidden="true">&#9829;</span>
           <div class="signature" id="signature">Com amor, João &#129293;</div>
         </div>
@@ -690,26 +701,33 @@ document.addEventListener('DOMContentLoaded', function () {
     var cardClubs = document.getElementById('cardClubs');
     var finalScene = document.getElementById('finalScene');
     var messageOutside = document.getElementById('messageOutside');
-    var loveText = document.getElementById('loveText');
+    var linePara1 = document.getElementById('linePara1');
+    var linePara2 = document.getElementById('linePara2');
+    var linePara3 = document.getElementById('linePara3');
+    var loveCursor = document.getElementById('loveCursor');
     var signature = document.getElementById('signature');
     var replayBtn = document.getElementById('replay');
     var heartsWrap = document.getElementById('hearts');
     var heartPath = document.getElementById('heartPath');
 
     var PHRASE = 'Feliz nosso Dia...';
-    var MESSAGE = 'Feliz nosso dia meu amor, hoje completamos 8 meses de relacionamento, 8 meses de um ciclo que começou do nada e hoje virou tudo para a minha vida.\n\nObrigado por tudo meu amor, por ser quem você é, por sempre ser o meu sorriso e ser a minha luz, ser o meu anjinho. eu te amo com cada espaço que tem no meu coração e com cada fragmento que tem na minha alma, que Deus sempre abençõe o nosso relacionamento e que sempre possamos ficar juntos acima de tudo e de qualquer coisa...\n\nEu te amo tanto, meu floquinho!';
-
-    var PHOTOS = [
-      { src: 'https://i.ibb.co/wrCQs5T6/20251206-201620.jpg', alt: 'lembrança 1' },
-      { src: 'https://i.ibb.co/CKKY1f2L/IMG-20250518-162228-374.webp', alt: 'lembrança 2' },
-      { src: 'https://i.ibb.co/FkVxWMzh/IMG-20250518-163935-566.webp', alt: 'lembrança 3' },
-      { src: 'https://i.ibb.co/S4TD8ssf/IMG-20260329-WA0055.jpg', alt: 'lembrança 4' },
-      { src: 'https://i.ibb.co/V0Fht1nX/IMG-20260612-WA0009.jpg', alt: 'lembrança 5' },
-      { src: 'https://i.ibb.co/DHM7mxMv/IMG-20260612-WA0010.jpg', alt: 'lembrança 6' },
-      { src: 'https://i.ibb.co/twnBXw83/IMG-20260612-WA0012.jpg', alt: 'lembrança 7' }
+    var MESSAGE_PARTS = [
+      'Feliz nosso dia meu amor, hoje completamos 8 meses de relacionamento, 8 meses de um ciclo que começou do nada e hoje virou tudo para a minha vida.',
+      'Obrigado por tudo meu amor, por ser quem você é, por sempre ser o meu sorriso e ser a minha luz, ser o meu anjinho. eu te amo com cada espaço que tem no meu coração e com cada fragmento que tem na minha alma, que Deus sempre abençõe o nosso relacionamento e que sempre possamos ficar juntos acima de tudo e de qualquer coisa...',
+      'Eu te amo tanto, meu floquinho!'
     ];
 
-    if (!phrase || !phraseText || !milestone || !frame || !numbersLayer || !photoCaption || !photoRain || !trucoScene || !trucoShout || !cardHearts || !cardClubs || !finalScene || !messageOutside || !loveText || !signature || !replayBtn || !heartsWrap || !heartPath) {
+    var PHOTOS = [
+      { src: 'https://i.ibb.co/fVS3SVq0/20251206-201620.jpg', alt: 'lembrança 1' },
+      { src: 'https://i.ibb.co/Zpsx8CSq/IMG-20250518-162228-374.webp', alt: 'lembrança 2' },
+      { src: 'https://i.ibb.co/CKvtBG85/IMG-20250518-163935-566.webp', alt: 'lembrança 3' },
+      { src: 'https://i.ibb.co/8DS5nw2n/IMG-20260329-WA0055.jpg', alt: 'lembrança 4' },
+      { src: 'https://i.ibb.co/Q793sRPY/IMG-20260612-WA0009.jpg', alt: 'lembrança 5' },
+      { src: 'https://i.ibb.co/xkMLdFb/IMG-20260612-WA0010.jpg', alt: 'lembrança 6' },
+      { src: 'https://i.ibb.co/yF8VnSTY/IMG-20260612-WA0012.jpg', alt: 'lembrança 7' }
+    ];
+
+    if (!phrase || !phraseText || !milestone || !frame || !numbersLayer || !photoCaption || !photoRain || !trucoScene || !trucoShout || !cardHearts || !cardClubs || !finalScene || !messageOutside || !linePara1 || !linePara2 || !linePara3 || !loveCursor || !signature || !replayBtn || !heartsWrap || !heartPath) {
       throw new Error('elemento essencial nao encontrado');
     }
 
@@ -793,6 +811,13 @@ document.addEventListener('DOMContentLoaded', function () {
         img.alt = PHOTOS[i].alt;
         img.loading = 'eager';
         img.decoding = 'async';
+        img.onload = function () {
+          if (this.naturalWidth && this.naturalHeight) {
+            var ratio = this.naturalWidth / this.naturalHeight;
+            var clamped = Math.max(0.55, Math.min(1.6, ratio));
+            this.parentNode.style.aspectRatio = String(clamped);
+          }
+        };
         card.appendChild(img);
         photoRain.appendChild(card);
         photoCards.push(card);
@@ -864,7 +889,10 @@ document.addEventListener('DOMContentLoaded', function () {
       signature.classList.remove('show');
       replayBtn.classList.remove('show');
       phraseText.textContent = '';
-      loveText.textContent = '';
+      linePara1.textContent = '';
+      linePara2.textContent = '';
+      linePara3.textContent = '';
+      messageOutside.classList.remove('typing');
       heartPath.style.transition = 'none';
       heartPath.style.strokeDashoffset = String(heartLen);
       void phrase.offsetWidth;
@@ -929,10 +957,28 @@ document.addEventListener('DOMContentLoaded', function () {
                           finalScene.classList.add('active');
                           after(30, function () { finalScene.classList.add('show'); });
                           burstSymbols(finalScene, ['\u2665'], 12, ['#ffc2d6', '#fff6f8', '#f3cf94'], 'love-burst', { min: 60, max: 150 });
-                          typeWriter(loveText, MESSAGE, 26, function () {
-                            signature.classList.add('show');
-                            after(700, function () { replayBtn.classList.add('show'); });
-                          });
+
+                          var letterParagraphs = [linePara1, linePara2, linePara3];
+                          messageOutside.classList.add('typing');
+                          var pIdx = 0;
+                          function typeNextParagraph() {
+                            if (pIdx >= letterParagraphs.length) {
+                              messageOutside.classList.remove('typing');
+                              signature.classList.add('show');
+                              after(700, function () { replayBtn.classList.add('show'); });
+                              return;
+                            }
+                            var target = letterParagraphs[pIdx];
+                            var textSpan = document.createElement('span');
+                            textSpan.className = 'p-text';
+                            target.appendChild(textSpan);
+                            target.appendChild(loveCursor);
+                            typeWriter(textSpan, MESSAGE_PARTS[pIdx], 26, function () {
+                              pIdx++;
+                              after(350, typeNextParagraph);
+                            });
+                          }
+                          typeNextParagraph();
                         });
                       });
                     });
@@ -957,257 +1003,17 @@ document.addEventListener('DOMContentLoaded', function () {
     var ms = document.getElementById('milestone');
     var nl = document.getElementById('numbersLayer');
     var fs = document.getElementById('finalScene');
-    var lt = document.getElementById('loveText');
+    var lp1 = document.getElementById('linePara1');
+    var lp2 = document.getElementById('linePara2');
+    var lp3 = document.getElementById('linePara3');
     if (p) p.textContent = 'Feliz nosso dia';
     if (ph) { ph.style.opacity = '1'; ph.style.position = 'static'; ph.style.transform = 'none'; }
     if (ms) { ms.style.opacity = '1'; ms.style.transform = 'none'; }
     if (nl) nl.style.opacity = '1';
     if (fs) { fs.style.display = 'flex'; fs.style.opacity = '1'; }
-    if (lt) lt.textContent = 'Feliz nosso dia meu amor, hoje completamos 8 meses de relacionamento, 8 meses de um ciclo que começou do nada e hoje virou tudo para a minha vida. Obrigado por tudo meu amor, por ser quem você é, por sempre ser o meu sorriso e ser a minha luz, ser o meu anjinho. eu te amo com cada espaço que tem no meu coração e com cada fragmento que tem na minha alma, que Deus sempre abençõe o nosso relacionamento e que sempre possamos ficar juntos acima de tudo e de qualquer coisa... Eu te amo tanto, meu floquinho!';
-  }
-});
-</script>
-
-</body>
-</html>    // ambient rain of hearts + flowers, behind everything, runs the whole time
-    function spawnHearts() {
-      heartsWrap.innerHTML = '';
-      var symbols = ['\u2665', '\uD83C\uDF38', '\u2665', '\uD83C\uDF37', '\u2665', '\uD83C\uDF3A'];
-      var colors = ['#ffc2d6', '#fff6f8', '#f3cf94', '#ff8fae'];
-      var count = 24;
-      for (var i = 0; i < count; i++) {
-        var h = document.createElement('span');
-        h.className = 'heart-particle';
-        var sym = symbols[i % symbols.length];
-        h.textContent = sym;
-        var size = (Math.random() * 1.1 + 0.6).toFixed(2);
-        var left = (Math.random() * 100).toFixed(1);
-        var duration = (Math.random() * 9 + 9).toFixed(1);
-        var delay = (Math.random() * 14).toFixed(1);
-        var sway = (Math.random() * 40 + 10).toFixed(0);
-        var opacity = (Math.random() * 0.35 + 0.25).toFixed(2);
-        h.style.left = left + 'vw';
-        h.style.fontSize = size + 'rem';
-        if (sym === '\u2665') { h.style.color = colors[i % colors.length]; }
-        h.style.animationDuration = duration + 's';
-        h.style.animationDelay = delay + 's';
-        h.style.setProperty('--sway', sway + 'px');
-        h.style.setProperty('--o', opacity);
-        heartsWrap.appendChild(h);
-      }
-    }
-
-    function typeWriter(el, text, speed, onDone) {
-      el.textContent = '';
-      var i = 0;
-      function step() {
-        if (i <= text.length) {
-          el.textContent = text.slice(0, i);
-          i++;
-          after(speed, step);
-        } else if (onDone) {
-          onDone();
-        }
-      }
-      step();
-    }
-
-    function drawHeart() {
-      heartPath.style.transition = 'stroke-dashoffset 1.9s ease-out';
-      heartPath.style.strokeDashoffset = '0';
-    }
-
-    function undrawHeart() {
-      heartPath.style.transition = 'stroke-dashoffset 1.3s ease-in';
-      heartPath.style.strokeDashoffset = String(heartLen);
-    }
-
-    // ---------- photo rain: memories dropping in, one by one, in the heart's place ----------
-    var photoCards = [];
-    function spawnPhotoCards() {
-      photoRain.innerHTML = '';
-      photoCards = [];
-      for (var i = 0; i < PHOTOS.length; i++) {
-        var card = document.createElement('div');
-        card.className = 'photo-card';
-        var dx = (Math.random() * 26 - 13).toFixed(0);
-        var rot = (Math.random() * 12 - 6).toFixed(1);
-        card.style.setProperty('--dx', dx + 'px');
-        card.style.setProperty('--rot', rot + 'deg');
-        var img = document.createElement('img');
-        img.src = PHOTOS[i].src;
-        img.alt = PHOTOS[i].alt;
-        img.loading = 'eager';
-        img.decoding = 'async';
-        card.appendChild(img);
-        photoRain.appendChild(card);
-        photoCards.push(card);
-      }
-    }
-
-    function runPhotoRain(onAllDone) {
-      var HOLD = 1300;
-      var GAP = 250;
-      function showPhoto(i) {
-        if (i >= photoCards.length) { onAllDone(); return; }
-        var card = photoCards[i];
-        card.classList.add('show');
-        after(HOLD, function () {
-          card.classList.remove('show');
-          card.classList.add('leave');
-          after(600, function () {
-            after(GAP, function () { showPhoto(i + 1); });
-          });
-        });
-      }
-      showPhoto(0);
-    }
-
-    // ---------- generic little burst of symbols ----------
-    function burstSymbols(container, symbols, count, colors, className, spread) {
-      for (var i = 0; i < count; i++) {
-        (function (idx) {
-          var s = document.createElement('span');
-          s.className = className;
-          s.textContent = symbols[idx % symbols.length];
-          var angle = Math.random() * Math.PI * 2;
-          var dist = spread.min + Math.random() * (spread.max - spread.min);
-          var dx = Math.cos(angle) * dist;
-          var dy = Math.sin(angle) * dist;
-          var size = (0.7 + Math.random() * 0.9).toFixed(2);
-          s.style.fontSize = size + 'rem';
-          s.style.color = colors[idx % colors.length];
-          container.appendChild(s);
-          if (s.animate) {
-            var anim = s.animate([
-              { transform: 'translate(-50%,-50%) scale(0.4)', opacity: 1 },
-              { transform: 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px)) scale(1)', opacity: 0 }
-            ], { duration: 1200 + Math.random() * 500, delay: Math.random() * 150, easing: 'ease-out', fill: 'forwards' });
-            anim.onfinish = function () { s.remove(); };
-          } else {
-            after(1700, function () { s.remove(); });
-          }
-        })(i);
-      }
-    }
-
-    function runSequence() {
-      clearTimers();
-      spawnHearts();
-      spawnPhotoCards();
-
-      phrase.classList.remove('enter', 'leave', 'typing');
-      milestone.classList.remove('enter');
-      frame.classList.remove('dissolve', 'hidden');
-      numbersLayer.classList.remove('show');
-      photoCaption.classList.remove('active', 'show');
-      photoRain.classList.remove('active');
-      trucoScene.classList.remove('active', 'fade-out');
-      trucoShout.classList.remove('shout');
-      cardHearts.classList.remove('thrown');
-      cardClubs.classList.remove('thrown');
-      finalScene.classList.remove('active', 'show');
-      replayBtn.classList.remove('show');
-      phraseText.textContent = '';
-      loveText.textContent = '';
-      heartPath.style.transition = 'none';
-      heartPath.style.strokeDashoffset = String(heartLen);
-      void phrase.offsetWidth;
-
-      // 1. phrase fades in, types itself out fairly quickly
-      phrase.classList.add('enter');
-      phrase.classList.add('typing');
-
-      after(300, function () {
-        typeWriter(phraseText, PHRASE, 65, function () {
-          after(1400, function () {
-            phrase.classList.remove('typing');
-            phrase.classList.remove('enter');
-            phrase.classList.add('leave');
-
-            after(280, function () {
-              // 2. heart forms, centered, and holds "juntos há 8 meses" alone for a while
-              milestone.classList.add('enter');
-              after(150, drawHeart);
-              after(400, function () { numbersLayer.classList.add('show'); });
-
-              after(3800, function () {
-                // 3. the heart dissolves completely before the photos appear
-                frame.classList.add('dissolve');
-                numbersLayer.classList.remove('show');
-                undrawHeart();
-
-                after(1300, function () {
-                  frame.classList.add('hidden');
-
-                  // 4. caption + photos, one by one, in the heart's place
-                  photoCaption.classList.add('active');
-                  after(60, function () { photoCaption.classList.add('show'); });
-                  photoRain.classList.add('active');
-
-                  runPhotoRain(function () {
-                    photoRain.classList.remove('active');
-                    photoCaption.classList.remove('show');
-
-                    after(600, function () {
-                      photoCaption.classList.remove('active');
-
-                      // 5. truco scene: K de paus mata o K de copas
-                      trucoScene.classList.add('active');
-                      after(350, function () { cardHearts.classList.add('thrown'); });
-                      after(1050, function () {
-                        cardClubs.classList.add('thrown');
-                        stage.classList.add('shake');
-                        after(450, function () { stage.classList.remove('shake'); });
-                        after(150, function () {
-                          trucoShout.classList.add('shout');
-                          burstSymbols(trucoScene, ['\u2726', '\u2605'], 10, ['#f3cf94', '#fff3d6', '#ffdca1'], 'impact-burst', { min: 50, max: 120 });
-                        });
-                      });
-
-                      after(3300, function () {
-                        trucoScene.classList.add('fade-out');
-                        after(500, function () {
-                          trucoScene.classList.remove('active', 'fade-out');
-
-                          // 6. the final letter, decorated, writing itself
-                          finalScene.classList.add('active');
-                          after(30, function () { finalScene.classList.add('show'); });
-                          burstSymbols(finalScene, ['\u2665'], 12, ['#ffc2d6', '#fff6f8', '#f3cf94'], 'love-burst', { min: 60, max: 150 });
-                          typeWriter(loveText, MESSAGE, 55, function () {
-                            after(600, function () { replayBtn.classList.add('show'); });
-                          });
-                        });
-                      });
-                    });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    }
-
-    replayBtn.addEventListener('click', runSequence);
-    runSequence();
-
-  } catch (err) {
-    // fallback: if anything goes wrong, always show the content statically
-    // instead of leaving a blank screen
-    console.error('Falha na animacao, mostrando versao estatica:', err);
-    var p = document.getElementById('phraseText');
-    var ph = document.getElementById('phrase');
-    var ms = document.getElementById('milestone');
-    var nl = document.getElementById('numbersLayer');
-    var fs = document.getElementById('finalScene');
-    var lt = document.getElementById('loveText');
-    if (p) p.textContent = 'Feliz nosso dia';
-    if (ph) { ph.style.opacity = '1'; ph.style.position = 'static'; ph.style.transform = 'none'; }
-    if (ms) { ms.style.opacity = '1'; ms.style.transform = 'none'; }
-    if (nl) nl.style.opacity = '1';
-    if (fs) { fs.style.display = 'flex'; fs.style.opacity = '1'; }
-    if (lt) lt.textContent = 'Eu te amo Yasmin, com minha alma e meu coração, feliz nosso dia!';
+    if (lp1) lp1.textContent = 'Feliz nosso dia meu amor, hoje completamos 8 meses de relacionamento, 8 meses de um ciclo que começou do nada e hoje virou tudo para a minha vida.';
+    if (lp2) lp2.textContent = 'Obrigado por tudo meu amor, por ser quem você é, por sempre ser o meu sorriso e ser a minha luz, ser o meu anjinho. eu te amo com cada espaço que tem no meu coração e com cada fragmento que tem na minha alma, que Deus sempre abençõe o nosso relacionamento e que sempre possamos ficar juntos acima de tudo e de qualquer coisa...';
+    if (lp3) lp3.textContent = 'Eu te amo tanto, meu floquinho!';
   }
 });
 </script>
