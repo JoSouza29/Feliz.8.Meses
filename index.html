@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Feliz nosso dia — 8 meses</title>
+<title>Feliz nosso dia,8 meses</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -569,11 +569,8 @@ body{
 
 /* ---------- replay control ---------- */
 .replay{
-  position:absolute;
-  bottom:clamp(1.2rem, 3.4vh, 2.2rem);
-  left:50%;
-  transform:translateX(-50%);
-  z-index:3;
+  position:relative;
+  margin-top:clamp(1.2rem, 4vh, 2rem);
   background:rgba(255,255,255,0.12);
   border:1px solid rgba(255,255,255,0.35);
   color:var(--cream);
@@ -676,12 +673,11 @@ body{
         <span class="sparkle sp2" aria-hidden="true">&#10023;</span>
         <span class="sparkle sp3" aria-hidden="true">&#10022;</span>
         <span class="sparkle sp4" aria-hidden="true">&#10023;</span>
+        <button class="replay" id="replay" type="button">&#8635; ver de novo</button>
       </div>
 
     </div>
   </div>
-
-  <button class="replay" id="replay" type="button">&#8635; ver de novo</button>
 </div>
 
 <script>
