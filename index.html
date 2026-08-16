@@ -114,7 +114,7 @@ body{
   font-family:'Great Vibes', 'Brush Script MT', cursive;
   font-weight:400;
   font-size:clamp(3.4rem, 14vw, 7rem);
-  line-height:1.25;
+  line-height:1.15;
   color:var(--cream);
   text-shadow:0 4px 26px rgba(85,8,31,0.45);
   opacity:0;
@@ -122,11 +122,12 @@ body{
   position:absolute;
   inset:0;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
 }
-.phrase-text{
-  display:inline-block;
+.phrase-line{
+  display:block;
   max-width:100%;
 }
 .cursor{
@@ -280,11 +281,11 @@ body{
   font-family:'Cormorant Garamond', Georgia, serif;
   font-style:italic;
   font-weight:600;
-  font-size:clamp(1.1rem, 4vw, 1.5rem);
+  font-size:clamp(1.35rem, 5.2vw, 1.9rem);
   line-height:1.5;
   color:var(--cream);
   text-shadow:0 4px 18px rgba(85,8,31,0.5);
-  max-width:82vw;
+  max-width:88vw;
   text-align:center;
   opacity:0;
   transition:opacity 0.6s ease;
@@ -639,7 +640,7 @@ body{
 
   <div class="content">
     <h1 class="phrase" id="phrase">
-      <span class="phrase-text" id="phraseText"></span><span class="cursor" id="phraseCursor">|</span>
+      <span class="phrase-line" id="phraseLine1"></span><span class="phrase-line" id="phraseLine2"></span><span class="cursor" id="phraseCursor">|</span>
     </h1>
 
     <div class="milestone" id="milestone">
@@ -712,7 +713,9 @@ document.addEventListener('DOMContentLoaded', function () {
   try {
     var stage = document.getElementById('stage');
     var phrase = document.getElementById('phrase');
-    var phraseText = document.getElementById('phraseText');
+    var phraseLine1 = document.getElementById('phraseLine1');
+    var phraseLine2 = document.getElementById('phraseLine2');
+    var phraseCursor = document.getElementById('phraseCursor');
     var milestone = document.getElementById('milestone');
     var frame = document.getElementById('frame');
     var numbersLayer = document.getElementById('numbersLayer');
@@ -733,7 +736,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var heartsWrap = document.getElementById('hearts');
     var heartPath = document.getElementById('heartPath');
 
-    var PHRASE = 'Feliz nosso Dia...';
+    var PHRASE_LINE1 = 'Feliz';
+    var PHRASE_LINE2 = 'Nosso dia...';
     var MESSAGE_PARTS = [
       'Feliz nosso dia meu amor, hoje completamos 8 meses de relacionamento, 8 meses de um ciclo que começou do nada e hoje virou tudo para a minha vida.',
       'Obrigado por tudo meu amor, por ser quem você é, por sempre ser o meu sorriso e ser a minha luz, ser o meu anjinho. eu te amo com cada espaço que tem no meu coração e com cada fragmento que tem na minha alma, que Deus sempre abençõe o nosso relacionamento e que sempre possamos ficar juntos acima de tudo e de qualquer coisa...',
@@ -750,7 +754,7 @@ document.addEventListener('DOMContentLoaded', function () {
       { src: 'https://i.ibb.co/yF8VnSTY/IMG-20260612-WA0012.jpg', alt: 'lembrança 7' }
     ];
 
-    if (!phrase || !phraseText || !milestone || !frame || !numbersLayer || !photoCaption || !photoRain || !trucoScene || !trucoShout || !cardHearts || !cardClubs || !finalScene || !messageOutside || !linePara1 || !linePara2 || !linePara3 || !loveCursor || !signature || !replayBtn || !heartsWrap || !heartPath) {
+    if (!phrase || !phraseLine1 || !phraseLine2 || !phraseCursor || !milestone || !frame || !numbersLayer || !photoCaption || !photoRain || !trucoScene || !trucoShout || !cardHearts || !cardClubs || !finalScene || !messageOutside || !linePara1 || !linePara2 || !linePara3 || !loveCursor || !signature || !replayBtn || !heartsWrap || !heartPath) {
       throw new Error('elemento essencial nao encontrado');
     }
 
@@ -904,7 +908,8 @@ document.addEventListener('DOMContentLoaded', function () {
       finalScene.classList.remove('active', 'show');
       signature.classList.remove('show');
       replayBtn.classList.remove('show');
-      phraseText.textContent = '';
+      phraseLine1.textContent = '';
+      phraseLine2.textContent = '';
       linePara1.textContent = '';
       linePara2.textContent = '';
       linePara3.textContent = '';
@@ -918,7 +923,10 @@ document.addEventListener('DOMContentLoaded', function () {
       phrase.classList.add('typing');
 
       after(300, function () {
-        typeWriter(phraseText, PHRASE, 65, function () {
+        phraseLine1.appendChild(phraseCursor);
+        typeWriter(phraseLine1, PHRASE_LINE1, 65, function () {
+          phraseLine2.appendChild(phraseCursor);
+          typeWriter(phraseLine2, PHRASE_LINE2, 65, function () {
           after(1400, function () {
             phrase.classList.remove('typing');
             phrase.classList.remove('enter');
@@ -1003,6 +1011,7 @@ document.addEventListener('DOMContentLoaded', function () {
               });
             });
           });
+          });
         });
       });
     }
@@ -1014,7 +1023,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // fallback: if anything goes wrong, always show the content statically
     // instead of leaving a blank screen
     console.error('Falha na animacao, mostrando versao estatica:', err);
-    var p = document.getElementById('phraseText');
+    var p1 = document.getElementById('phraseLine1');
+    var p2 = document.getElementById('phraseLine2');
     var ph = document.getElementById('phrase');
     var ms = document.getElementById('milestone');
     var nl = document.getElementById('numbersLayer');
@@ -1022,7 +1032,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var lp1 = document.getElementById('linePara1');
     var lp2 = document.getElementById('linePara2');
     var lp3 = document.getElementById('linePara3');
-    if (p) p.textContent = 'Feliz nosso dia';
+    if (p1) p1.textContent = 'Feliz';
+    if (p2) p2.textContent = 'Nosso dia...';
     if (ph) { ph.style.opacity = '1'; ph.style.position = 'static'; ph.style.transform = 'none'; }
     if (ms) { ms.style.opacity = '1'; ms.style.transform = 'none'; }
     if (nl) nl.style.opacity = '1';
