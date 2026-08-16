@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Feliz nosso dia,8 meses</title>
+<title>Feliz nosso dia — 8 meses</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Caveat:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -29,6 +29,9 @@ html, body{
   overflow-x:hidden;
   overflow-y:auto;
   background:var(--deep-wine);
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  -webkit-tap-highlight-color:transparent;
 }
 
 body{
@@ -51,6 +54,14 @@ body{
   animation:driftBg 16s ease-in-out infinite;
 }
 .stage.shake{ animation:driftBg 16s ease-in-out infinite, impactShake 0.4s ease; }
+.stage::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse at center, transparent 42%, rgba(28,2,10,0.38) 100%);
+  pointer-events:none;
+  z-index:1;
+}
 
 @keyframes driftBg{
   0%,100%{ background-position:28% 20%; }
@@ -172,6 +183,20 @@ body{
   justify-content:center;
   flex-shrink:0;
 }
+.frame::before{
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:150%;
+  height:150%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(243,207,148,0.26) 0%, rgba(255,95,143,0.14) 45%, transparent 72%);
+  filter:blur(18px);
+  animation:glowPulse 4.2s ease-in-out infinite;
+  z-index:-1;
+  pointer-events:none;
+}
 .frame.dissolve{
   animation:frameDissolve 1.3s ease-in forwards;
 }
@@ -289,7 +314,7 @@ body{
   background:#fffdfb;
   padding:8px 8px 22px 8px;
   border-radius:7px;
-  box-shadow:0 16px 34px rgba(30,4,14,0.45);
+  box-shadow:0 16px 34px rgba(30,4,14,0.45), 0 0 26px rgba(255,150,180,0.22);
   opacity:0;
   transform:translate(var(--dx), -28px) rotate(var(--rot)) scale(0.9);
   transition:opacity 0.65s ease, transform 0.65s cubic-bezier(.2,.8,.25,1);
@@ -334,7 +359,7 @@ body{
   transform:translate(-50%,-50%) scale(0.1) rotate(-8deg);
   font-family:'Josefin Sans', Arial, sans-serif;
   font-weight:700;
-  font-size:clamp(2rem, 10vw, 4rem);
+  font-size:clamp(2.3rem, 10vw, 4rem);
   letter-spacing:0.02em;
   color:#fff3d6;
   -webkit-text-stroke:2px #8a0e24;
@@ -360,7 +385,7 @@ body{
   aspect-ratio:0.68;
   background:#fffaf3;
   border-radius:9px;
-  box-shadow:0 12px 28px rgba(0,0,0,0.55);
+  box-shadow:0 12px 28px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.55) inset;
   border:1px solid rgba(0,0,0,0.08);
   display:flex;
   flex-direction:column;
@@ -470,8 +495,9 @@ body{
       transparent 0px, transparent 31px,
       rgba(120,150,195,0.4) 32px, rgba(120,150,195,0.4) 32px
     ),
+    radial-gradient(circle at 1px 1px, rgba(120,80,50,0.05) 1px, transparent 0) 0 0/16px 16px,
     linear-gradient(155deg, #fffdf6 0%, #fff8ec 55%, #fff1de 100%);
-  background-position: 0 46px, 0 0;
+  background-position: 0 46px, 0 0, 0 0;
   border-radius:5px;
   box-shadow:0 22px 48px rgba(20,2,8,0.55), 0 2px 0 rgba(255,255,255,0.5) inset;
   padding:46px 24px 30px 34px;
@@ -571,6 +597,7 @@ body{
 .replay{
   position:relative;
   margin-top:clamp(1.2rem, 4vh, 2rem);
+  touch-action:manipulation;
   background:rgba(255,255,255,0.12);
   border:1px solid rgba(255,255,255,0.35);
   color:var(--cream);
